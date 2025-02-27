@@ -15,22 +15,6 @@ import { formatPrice } from "@/lib/utils/format";
 import { ProductGrid } from "@/components/products/product-grid";
 import { Product } from "@/lib/types";
 
-
-//export async function generateStaticParams() {
-//  const products = []; // Aquí deberías traer tus productos desde tu servicio
-//  return products.map((product) => ({
-//    id: product.id.toString(), // Asegúrate de que sea string
-//  }));
-//}
-
-
-export async function generateStaticParams() {
-  const products = [{ id: "1" }, { id: "2" }, { id: "3" }]; // Mock
-  return products.map((product) => ({
-    id: product.id,
-  }));
-}
-
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);
   const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
@@ -46,7 +30,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       
       setProduct(foundProduct);
       
-      // Get related products from the same category
+      // Obtiene productos relacionados de la misma categoría
       const related = getProductsByCategory(foundProduct.category)
         .filter((p) => p.id !== foundProduct.id)
         .slice(0, 4);
