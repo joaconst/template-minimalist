@@ -80,17 +80,17 @@ export function ProductFilter({
       <SheetTrigger asChild>
         <Button variant="outline" size="sm" className="flex items-center gap-2">
           <FilterIcon className="h-4 w-4" />
-          Filters
+          Filtros
         </Button>
       </SheetTrigger>
       <SheetContent side="left" className="w-[300px] sm:w-[400px]">
         <SheetHeader>
-          <SheetTitle>Filters</SheetTitle>
+          <SheetTitle>Filtros</SheetTitle>
         </SheetHeader>
         <Separator className="my-4" />
         <div className="space-y-6">
           <div className="space-y-3">
-            <h3 className="text-sm font-medium">Categories</h3>
+            <h3 className="text-sm font-medium">Categorías</h3>
             <RadioGroup
               value={selectedCategory}
               onValueChange={handleCategoryChange}
@@ -107,7 +107,7 @@ export function ProductFilter({
           <Separator />
           <div className="space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">Price Range</h3>
+              <h3 className="text-sm font-medium">Rango de precios</h3>
               <p className="text-xs text-muted-foreground">
                 ${priceRange[0]} - ${priceRange[1]}
               </p>
@@ -122,9 +122,9 @@ export function ProductFilter({
             />
           </div>
           <div className="flex flex-col gap-2 pt-4">
-            <Button onClick={applyFilters}>Apply Filters</Button>
+            <Button onClick={applyFilters}>Aplicar filtros</Button>
             <Button variant="outline" onClick={resetFilters}>
-              Reset Filters
+              Reiniciar filtros
             </Button>
           </div>
         </div>

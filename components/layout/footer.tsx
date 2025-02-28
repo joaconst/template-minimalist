@@ -10,10 +10,10 @@ interface FooterProps {
 }
 
 export function Footer({
-  storeName = "Minima",
-  location = "123 Minimalist St, Design City",
-  email = "hello@minima.com",
-  phone = "+1 (555) 123-4567",
+  storeName = "Spectra",
+  location = "XXXXXXXXXX",
+  email = "hello@spectra.com",
+  phone = "+5493516222999",
 }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
@@ -24,66 +24,56 @@ export function Footer({
           <div className="space-y-4">
             <h3 className="text-lg font-medium">{storeName}</h3>
             <p className="text-sm text-muted-foreground max-w-xs">
-              Minimalist designs for the modern lifestyle. Quality products with clean aesthetics.
+              Descripción XXXXXXXXXXXXXXXXXXXXXXXXXXXXXxx
             </p>
           </div>
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Shop</h3>
+            <h3 className="text-lg font-medium">Tienda</h3>
             <ul className="space-y-2 text-sm">
               <li>
                 <Link href="/products" className="text-muted-foreground hover:text-foreground transition-colors">
-                  All Products
+                  Todos los productos
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=clothing" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Clothing
+                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                  De sol
                 </Link>
               </li>
               <li>
-                <Link href="/products?category=accessories" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Accessories
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=home" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="/products?category=tech" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Tech
+                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Para ver
                 </Link>
               </li>
             </ul>
           </div>
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Company</h3>
+            <h3 className="text-lg font-medium">Compañía</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/about" className="text-muted-foreground hover:text-foreground transition-colors">
-                  About Us
+                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Sobre nosotros
                 </Link>
               </li>
               <li>
-                <Link href="/contact" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Contact
+                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Contacto
                 </Link>
               </li>
               <li>
-                <Link href="/terms" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Terms & Conditions
+                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Términos y condiciones
                 </Link>
               </li>
               <li>
-                <Link href="/privacy" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Privacy Policy
+                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Políticas de privacidad
                 </Link>
               </li>
             </ul>
           </div>
           <div className="space-y-4">
-            <h3 className="text-lg font-medium">Contact</h3>
+            <h3 className="text-lg font-medium">Contacto</h3>
             <ul className="space-y-2 text-sm">
               <li className="flex items-start gap-2">
                 <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground" />
@@ -103,13 +93,13 @@ export function Footer({
               </li>
             </ul>
             <div className="flex gap-4 pt-2">
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
+              <a href="https://www.instagram.com/spectra_shopp?igsh=ZjV5NWh4bWYweWJi" target="_blank" rel="noopener noreferrer" aria-label="Instagram">
                 <Instagram className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
               </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
+              <a href="/" target="_blank" rel="noopener noreferrer" aria-label="Twitter">
                 <Twitter className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
               </a>
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
+              <a href="/" target="_blank" rel="noopener noreferrer" aria-label="Facebook">
                 <Facebook className="h-5 w-5 text-muted-foreground hover:text-foreground transition-colors" />
               </a>
             </div>

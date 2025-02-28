@@ -51,7 +51,7 @@ export default function ProductsPage() {
       <main className="flex-1 py-10">
         <Container>
           <div className="mb-8 flex items-center justify-between">
-            <h1 className="text-3xl font-bold">Products</h1>
+            <h1 className="text-3xl font-bold">Productos</h1>
             <ProductFilter 
               categories={categories} 
               minPrice={0} 

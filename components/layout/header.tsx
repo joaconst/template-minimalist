@@ -1,7 +1,6 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
+import Image from "next/image"; // Import Image component
 import { ShoppingBag, Menu, X, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
@@ -13,13 +12,13 @@ interface HeaderProps {
   storeName?: string;
 }
 
-export function Header({ storeName = "Minima" }: HeaderProps) {
+export function Header({ storeName = "Spectra" }: HeaderProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [cartCount, setCartCount] = useState(0);
 
   const routes = [
-    { href: "/", label: "Home" },
-    { href: "/products", label: "Products" },
+    { href: "/", label: "Inicio" },
+    { href: "/products", label: "Productos" },
   ];
 
   return (
@@ -41,7 +40,16 @@ export function Header({ storeName = "Minima" }: HeaderProps) {
                     className="text-xl font-bold"
                     onClick={() => setIsMenuOpen(false)}
                   >
-                    {storeName}
+                    <div className="flex items-center gap-2">
+                      <Image
+                        src="/logo-blanco.jpg" // Use Image component
+                        alt="Logo"
+                        className="h-8 w-auto"
+                        width={32} // Set width
+                        height={32} // Set height
+                      />
+                      <span>{storeName}</span>
+                    </div>
                   </Link>
                   <nav className="flex flex-col gap-4">
                     {routes.map((route) => (
@@ -59,7 +67,16 @@ export function Header({ storeName = "Minima" }: HeaderProps) {
               </SheetContent>
             </Sheet>
             <Link href="/" className="hidden md:block">
-              <h1 className="text-xl font-bold">{storeName}</h1>
+              <div className="flex items-center gap-2">
+                <Image
+                  src="/logo-blanco.jpg" 
+                  alt="Logo"
+                  className="h-8 w-auto"
+                  width={50}
+                  height={50}
+                />
+                <span>{storeName}</span>
+              </div>
             </Link>
             <nav className="hidden md:ml-10 md:flex md:gap-4 lg:gap-6">
               {routes.map((route) => (
@@ -76,17 +93,13 @@ export function Header({ storeName = "Minima" }: HeaderProps) {
             </nav>
           </div>
 
-          <Link href="/" className="md:hidden">
-            <h1 className="text-xl font-bold">{storeName}</h1>
-          </Link>
-
           <div className="flex items-center gap-4">
             <form className="hidden md:block md:w-[200px] lg:w-[300px]">
               <div className="relative">
                 <Search className="absolute left-2.5 top-2.5 h-4 w-4 text-muted-foreground" />
                 <Input
                   type="search"
-                  placeholder="Search products..."
+                  placeholder="Buscar lentes..."
                   className="w-full rounded-md pl-8"
                 />
               </div>

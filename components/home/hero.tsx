@@ -6,14 +6,16 @@ interface HeroProps {
   title?: string;
   description?: string;
   ctaText?: string;
+  ctaCont?: string;
   ctaLink?: string;
   backgroundImage?: string;
 }
 
 export function Hero({
-  title = "Minimalist Design for Modern Living",
-  description = "Discover our curated collection of minimalist products designed to enhance your everyday life with simplicity and elegance.",
-  ctaText = "Shop Now",
+  title = "Lentes Spectra",
+  description = "Mini descripción",
+  ctaText = "Comprar ya",
+  ctaCont = "+5493516222999",
   ctaLink = "/products",
   backgroundImage,
 }: HeroProps) {
@@ -35,9 +37,18 @@ export function Hero({
           <p className="mt-6 text-lg text-muted-foreground md:text-xl">
             {description}
           </p>
-          <div className="mt-8">
+          <div className="mt-8 flex">
             <Button asChild size="lg">
               <Link href={ctaLink}>{ctaText}</Link>
+            </Button>
+            <Button asChild size="lg" className="ml-4">
+              <a
+                href={`https://wa.me/${ctaCont.replace("+", "")}`}
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                Contactar por WhatsApp
+              </a>
             </Button>
           </div>
         </div>

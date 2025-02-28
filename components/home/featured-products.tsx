@@ -12,8 +12,8 @@ interface FeaturedProductsProps {
 }
 
 export function FeaturedProducts({
-  title = "Featured Products",
-  description = "Discover our most popular minimalist designs.",
+  title = "Productos destacados",
+  description = "XXXXXXXXXXXXXX",
   products,
   onAddToCart,
 }: FeaturedProductsProps) {

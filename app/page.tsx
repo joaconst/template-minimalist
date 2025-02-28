@@ -25,7 +25,7 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero 
-          backgroundImage="https://images.unsplash.com/photo-1567401893414-76b7b1e5a7a5?auto=format&fit=crop&w=1920&q=80"
+          backgroundImage="/background.jpg"
         />
         <FeaturedProducts 
           products={featuredProducts} 
