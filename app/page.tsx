@@ -8,8 +8,6 @@ import { getFeaturedProducts, getCategories } from "@/lib/data";
 import { Product, Category } from "@/lib/types";
 import { useToast } from "@/hooks/use-toast";
 import { useState, useEffect } from "react";
-import { ProductFilter } from "@/components/products/product-filter";
-import HomePage from "@/components/home/test";
 
 export default function Home() {
   const [featuredProducts, setFeaturedProducts] = useState<Product[]>([]);
@@ -40,12 +38,10 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero backgroundImage="/background.jpg" />
-        <ProductFilter categories={categories} />
-        <FeaturedProducts 
-          products={featuredProducts} 
+        <FeaturedProducts
+          products={featuredProducts}
           onAddToCart={handleAddToCart}
         />
-        <HomePage />
       </main>
       <Footer />
     </div>

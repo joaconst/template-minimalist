@@ -57,10 +57,7 @@ export function ProductFilter({
   });
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => ({
-      ...prev,
-      [section]: !prev[section]
-    }));
+    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
   const handleFilterChange = (type: string, value: string | number) => {
