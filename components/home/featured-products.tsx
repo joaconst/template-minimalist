@@ -3,6 +3,7 @@
 import { Container } from "@/components/ui/container";
 import { ProductGrid } from "@/components/products/product-grid";
 import { Product } from "@/lib/types";
+import { useCart } from "@/components/cart-context";
 
 interface FeaturedProductsProps {
   title?: string;
@@ -17,6 +18,11 @@ export function FeaturedProducts({
   products,
   onAddToCart,
 }: FeaturedProductsProps) {
+  const { addToCart } = useCart();
+  const handleAddToCart = (product: Product) => {
+    addToCart(product);
+  };
+
   return (
     <section className="py-16">
       <Container>
@@ -24,7 +30,7 @@ export function FeaturedProducts({
           <h2 className="text-3xl font-bold">{title}</h2>
           <p className="mt-4 text-muted-foreground">{description}</p>
         </div>
-        <ProductGrid products={products} onAddToCart={onAddToCart} />
+        <ProductGrid products={products} onAddToCart={handleAddToCart} />
       </Container>
     </section>
   );

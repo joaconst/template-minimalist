@@ -1,20 +1,23 @@
-import { useState } from "react";
+"use client";
+
 import Link from "next/link";
-import Image from "next/image"; // Import Image component
-import { ShoppingBag, Menu, X, Search } from "lucide-react";
+import Image from "next/image";
+import { ShoppingBag, Menu, Search } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { cn } from "@/lib/utils";
+import { useCart } from "@/components/cart-context";
+import CartModal from "@/components/cart-modal";
 
 interface HeaderProps {
   storeName?: string;
 }
 
 export function Header({ storeName = "Spectra" }: HeaderProps) {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [cartCount, setCartCount] = useState(0);
+  const { cartItems } = useCart();
+  const cartCount = cartItems.length;
 
   const routes = [
     { href: "/", label: "Inicio" },
@@ -35,13 +38,8 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
               </SheetTrigger>
               <SheetContent side="left" className="w-[240px] sm:w-[300px]">
                 <div className="flex flex-col gap-6 py-6">
-                  <Link
-                    href="/"
-                    className="text-xl font-bold"
-                    onClick={() => setIsMenuOpen(false)}
-                  >
+                  <Link href="/" className="text-xl font-bold">
                     <div className="flex items-center gap-2">
-                      {/* Logo para versión clara */}
                       <Image
                         src="/logo-claro.jpg"
                         alt="Logo Claro"
@@ -49,7 +47,6 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                         width={32}
                         height={32}
                       />
-                      {/* Logo para versión oscura */}
                       <Image
                         src="/logo-oscuro.jpg"
                         alt="Logo Oscuro"
@@ -66,7 +63,6 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                         key={route.href}
                         href={route.href}
                         className="text-muted-foreground transition-colors hover:text-foreground"
-                        onClick={() => setIsMenuOpen(false)}
                       >
                         {route.label}
                       </Link>
@@ -77,7 +73,6 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
             </Sheet>
             <Link href="/" className="hidden md:block">
               <div className="flex items-center gap-2">
-                {/* Logo para versión clara */}
                 <Image
                   src="/logo-claro.jpg"
                   alt="Logo Claro"
@@ -85,7 +80,6 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                   width={50}
                   height={50}
                 />
-                {/* Logo para versión oscura */}
                 <Image
                   src="/logo-oscuro.jpg"
                   alt="Logo Oscuro"
@@ -122,19 +116,26 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                 />
               </div>
             </form>
-            <Button
-              variant="ghost"
-              size="icon"
-              className="relative"
-              aria-label="Shopping cart"
-            >
-              <ShoppingBag className="h-5 w-5" />
-              {cartCount > 0 && (
-                <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
-                  {cartCount}
-                </span>
-              )}
-            </Button>
+            <Sheet>
+              <SheetTrigger asChild>
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  className="relative"
+                  aria-label="Shopping cart"
+                >
+                  <ShoppingBag className="h-5 w-5" />
+                  {cartCount > 0 && (
+                    <span className="absolute -right-1 -top-1 flex h-4 w-4 items-center justify-center rounded-full bg-primary text-[10px] font-medium text-primary-foreground">
+                      {cartCount}
+                    </span>
+                  )}
+                </Button>
+              </SheetTrigger>
+              <SheetContent side="right" className="w-80">
+                <CartModal />
+              </SheetContent>
+            </Sheet>
           </div>
         </div>
       </Container>

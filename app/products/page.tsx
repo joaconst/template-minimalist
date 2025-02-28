@@ -7,8 +7,12 @@ import { Footer } from "@/components/layout/footer";
 import { Container } from "@/components/ui/container";
 import { ProductGrid } from "@/components/products/product-grid";
 import { ProductFilter } from "@/components/products/product-filter";
-import { getAllProducts, getProductsByCategory, categories } from "@/lib/data";
-import { Product } from "@/lib/types";
+import {
+  getAllProducts,
+  getProductsByCategory,
+  getCategories,
+} from "@/lib/data";
+import { Product, Category } from "@/lib/types";
 
 export default function ProductsPage() {
   const searchParams = useSearchParams();
@@ -18,31 +22,42 @@ export default function ProductsPage() {
 
   const [products, setProducts] = useState<Product[]>([]);
   const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const [categories, setCategories] = useState<Category[]>([]);
 
   useEffect(() => {
-    // Get initial products based on category
-    const initialProducts = categoryParam
-      ? getProductsByCategory(categoryParam)
-      : getAllProducts();
-    
-    setProducts(initialProducts);
-    
-    // Apply price filters if they exist
-    let filtered = [...initialProducts];
-    
-    if (minPriceParam) {
-      filtered = filtered.filter(
-        (product) => product.price >= parseInt(minPriceParam)
-      );
+    async function fetchProducts() {
+      // Obtener productos iniciales según la categoría (usando "tipo" en tu db)
+      const initialProducts = categoryParam
+        ? await getProductsByCategory(categoryParam)
+        : await getAllProducts();
+      
+      setProducts(initialProducts);
+      
+      // Aplicar filtros de precio si existen (usando la propiedad "precio")
+      let filtered = [...initialProducts];
+      
+      if (minPriceParam) {
+        filtered = filtered.filter(
+          (product) => product.precio >= parseInt(minPriceParam)
+        );
+      }
+      
+      if (maxPriceParam) {
+        filtered = filtered.filter(
+          (product) => product.precio <= parseInt(maxPriceParam)
+        );
+      }
+      
+      setFilteredProducts(filtered);
     }
-    
-    if (maxPriceParam) {
-      filtered = filtered.filter(
-        (product) => product.price <= parseInt(maxPriceParam)
-      );
+
+    async function fetchCategories() {
+      const cats = await getCategories();
+      setCategories(cats);
     }
-    
-    setFilteredProducts(filtered);
+
+    fetchProducts();
+    fetchCategories();
   }, [categoryParam, minPriceParam, maxPriceParam]);
 
   return (
@@ -62,7 +77,7 @@ export default function ProductsPage() {
             <ProductGrid products={filteredProducts} />
           ) : (
             <div className="flex h-40 items-center justify-center rounded-md border border-dashed">
-              <p className="text-muted-foreground">No products found.</p>
+              <p className="text-muted-foreground">No hay productos encontrados.</p>
             </div>
           )}
         </Container>

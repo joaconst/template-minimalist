@@ -1,12 +1,16 @@
 export interface Product {
   id: string;
-  name: string;
-  description: string;
-  price: number;
-  category: string;
-  image: string;
-  image2: string;
-  featured: boolean;
+  titulo: string;
+  descripcion: string;
+  color: string;
+  material: string;
+  patilla_flex: string;
+  sexo: string;
+  precio: number;
+  tipo: string;
+  imagen1: string;
+  imagen2: string;
+  destacado: boolean;
 }
 
 export interface CartItem extends Product {
