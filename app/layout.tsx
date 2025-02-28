@@ -3,11 +3,11 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
-import { CartProvider } from "@/components/cart-context";
+import { CartProvider } from "@/components/cart/cart-context";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Spectra - Lentes E-commerce",
+  title: "Spectra - Lentes",
   description: "xxxxxxxxxxxx",
 };
 
@@ -18,17 +18,13 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
+      <head />
       <body className={inter.className}>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
+        <ThemeProvider attribute="class" defaultTheme="system">
           <CartProvider>
             {children}
+            <Toaster />
           </CartProvider>
-          <Toaster />
         </ThemeProvider>
       </body>
     </html>

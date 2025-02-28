@@ -14,13 +14,13 @@ interface HeroProps {
 export function Hero({
   title = "Lentes Spectra",
   description = "Mini descripción",
-  ctaText = "Comprar ya",
+  ctaText = "Ver todos los productos",
   ctaCont = "+5493516222999",
   ctaLink = "/products",
   backgroundImage,
 }: HeroProps) {
   return (
-    <section className="relative py-20 md:py-28 lg:py-36">
+    <section className="h-screen relative py-20 md:py-28">
       {backgroundImage && (
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"

@@ -16,6 +16,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
 
+// Función para capitalizar palabras
+const capitalizeWords = (str: string) => {
+  return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
+};
+
 interface ProductFilterProps {
   categories: { id: string; name: string; slug: string }[];
   colors: string[];
@@ -43,7 +48,7 @@ export function ProductFilter({
     materiales: false,
     patilla: false,
     sexo: false,
-    precio: false
+    precio: true
   });
 
   const [filters, setFilters] = useState({
@@ -106,7 +111,10 @@ export function ProductFilter({
             title="Categorías"
             expanded={expandedSections.categorias}
             onToggle={() => toggleSection("categorias")}
-            options={categories.map(c => ({ value: c.slug, label: c.name }))}
+            options={categories.map(c => ({ 
+              value: c.slug, 
+              label: capitalizeWords(c.name) 
+            }))}
             selected={filters.category}
             onChange={(value) => handleFilterChange("category", value)}
           />
@@ -117,7 +125,10 @@ export function ProductFilter({
               title="Colores"
               expanded={expandedSections.colores}
               onToggle={() => toggleSection("colores")}
-              options={colors.map(c => ({ value: c, label: c }))}
+              options={colors.map(c => ({ 
+                value: c, 
+                label: capitalizeWords(c) 
+              }))}
               selected={filters.color}
               onChange={(value) => handleFilterChange("color", value)}
             />
@@ -129,7 +140,10 @@ export function ProductFilter({
               title="Materiales"
               expanded={expandedSections.materiales}
               onToggle={() => toggleSection("materiales")}
-              options={materials.map(m => ({ value: m, label: m }))}
+              options={materials.map(m => ({ 
+                value: m, 
+                label: capitalizeWords(m) 
+              }))}
               selected={filters.material}
               onChange={(value) => handleFilterChange("material", value)}
             />
@@ -141,7 +155,10 @@ export function ProductFilter({
               title="Patilla Flex"
               expanded={expandedSections.patilla}
               onToggle={() => toggleSection("patilla")}
-              options={patillaFlex.map(p => ({ value: p, label: p }))}
+              options={patillaFlex.map(p => ({ 
+                value: p, 
+                label: capitalizeWords(p) 
+              }))}
               selected={filters.patilla_flex}
               onChange={(value) => handleFilterChange("patilla_flex", value)}
             />
@@ -153,7 +170,10 @@ export function ProductFilter({
               title="Sexo"
               expanded={expandedSections.sexo}
               onToggle={() => toggleSection("sexo")}
-              options={sexo.map(s => ({ value: s, label: s }))}
+              options={sexo.map(s => ({ 
+                value: s, 
+                label: capitalizeWords(s) 
+              }))}
               selected={filters.sexo}
               onChange={(value) => handleFilterChange("sexo", value)}
             />
@@ -225,7 +245,7 @@ const FilterSection = ({
   <div className="space-y-2">
     <button
       onClick={onToggle}
-      className="w-full flex justify-between items-center p-2 hover:bg-gray-100 rounded-lg"
+      className="w-full flex justify-between items-center p-2 hover:bg-black/10 dark:hover:bg-white/10 rounded-lg"
     >
       <span className="font-medium">{title}</span>
       {expanded ? (

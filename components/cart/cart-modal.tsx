@@ -1,6 +1,6 @@
 "use client";
 
-import { useCart } from "@/components/cart-context";
+import { useCart } from "@/components/cart/cart-context";
 import { formatPrice } from "@/lib/utils/format";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";

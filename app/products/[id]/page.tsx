@@ -14,7 +14,7 @@ import { getProductById, getProductsByCategory } from "@/lib/data";
 import { formatPrice } from "@/lib/utils/format";
 import { ProductGrid } from "@/components/products/product-grid";
 import { Product } from "@/lib/types";
-import { useCart } from "@/components/cart-context";
+import { useCart } from "@/components/cart/cart-context";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const [product, setProduct] = useState<Product | null>(null);

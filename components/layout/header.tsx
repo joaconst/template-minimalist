@@ -1,15 +1,17 @@
 "use client";
 
+import { ShoppingBag, Menu, Search, Sun, Moon } from "lucide-react";
+import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";
-import { ShoppingBag, Menu, Search } from "lucide-react";
+import { useEffect, useState } from "react";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { Input } from "@/components/ui/input";
+import { useCart } from "@/components/cart/cart-context";
+import CartModal from "@/components/cart/cart-modal";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { cn } from "@/lib/utils";
-import { useCart } from "@/components/cart-context";
-import CartModal from "@/components/cart-modal";
 
 interface HeaderProps {
   storeName?: string;
@@ -18,11 +20,14 @@ interface HeaderProps {
 export function Header({ storeName = "Spectra" }: HeaderProps) {
   const { cartItems } = useCart();
   const cartCount = cartItems.length;
+  const { theme, resolvedTheme, setTheme } = useTheme();
+  const [isMounted, setIsMounted] = useState(false);
 
-  const routes = [
-    { href: "/", label: "Inicio" },
-    { href: "/products", label: "Productos" },
-  ];
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
+
+  const currentTheme = isMounted ? resolvedTheme : 'light';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -40,20 +45,24 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                 <div className="flex flex-col gap-6 py-6">
                   <Link href="/" className="text-xl font-bold">
                     <div className="flex items-center gap-2">
-                      <Image
-                        src="/logo-claro.jpg"
-                        alt="Logo Claro"
-                        className="h-8 w-auto dark:hidden"
-                        width={32}
-                        height={32}
-                      />
-                      <Image
-                        src="/logo-oscuro.jpg"
-                        alt="Logo Oscuro"
-                        className="h-8 w-auto hidden dark:block"
-                        width={32}
-                        height={32}
-                      />
+                      <div className="relative h-8 w-8">
+                        <Image
+                          src="/logo-claro.jpg"
+                          alt="Logo claro"
+                          width={32}
+                          height={32}
+                          className="absolute h-full w-full object-contain dark:hidden"
+                          priority
+                        />
+                        <Image
+                          src="/logo-oscuro.jpg"
+                          alt="Logo oscuro"
+                          width={32}
+                          height={32}
+                          className="hidden h-full w-full object-contain dark:block"
+                          priority
+                        />
+                      </div>
                       <span>{storeName}</span>
                     </div>
                   </Link>
@@ -73,20 +82,24 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
             </Sheet>
             <Link href="/" className="hidden md:block">
               <div className="flex items-center gap-2">
-                <Image
-                  src="/logo-claro.jpg"
-                  alt="Logo Claro"
-                  className="h-8 w-auto dark:hidden"
-                  width={50}
-                  height={50}
-                />
-                <Image
-                  src="/logo-oscuro.jpg"
-                  alt="Logo Oscuro"
-                  className="h-8 w-auto hidden dark:block"
-                  width={50}
-                  height={50}
-                />
+                <div className="relative h-8 w-8">
+                  <Image
+                    src="/logo-claro.jpg"
+                    alt="Logo claro"
+                    width={50}
+                    height={50}
+                    className="absolute h-full w-full object-contain transition-opacity duration-300 dark:opacity-0"
+                    priority
+                  />
+                  <Image
+                    src="/logo-oscuro.jpg"
+                    alt="Logo oscuro"
+                    width={50}
+                    height={50}
+                    className="absolute h-full w-full object-contain opacity-0 transition-opacity duration-300 dark:opacity-100"
+                    priority
+                  />
+                </div>
                 <span>{storeName}</span>
               </div>
             </Link>
@@ -116,6 +129,22 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                 />
               </div>
             </form>
+
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => setTheme(currentTheme === 'dark' ? 'light' : 'dark')}
+              aria-label="Cambiar tema"
+            >
+              {!isMounted ? (
+                <div className="h-5 w-5 bg-muted rounded" />
+              ) : currentTheme === 'dark' ? (
+                <Sun className="h-5 w-5" />
+              ) : (
+                <Moon className="h-5 w-5" />
+              )}
+            </Button>
+
             <Sheet>
               <SheetTrigger asChild>
                 <Button
@@ -142,3 +171,8 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
     </header>
   );
 }
+
+const routes = [
+  { href: "/", label: "Inicio" },
+  { href: "/products", label: "Productos" },
+];

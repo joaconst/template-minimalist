@@ -7,7 +7,7 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
 import { Product } from "@/lib/types";
 import { formatPrice } from "@/lib/utils/format";
-import { useCart } from "@/components/cart-context";
+import { useCart } from "@/components/cart/cart-context";
 
 interface ProductCardProps {
   product: Product;
