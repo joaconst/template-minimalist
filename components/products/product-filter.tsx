@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
-import { Filter as FilterIcon } from "lucide-react";
+import { Filter as FilterIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -15,143 +15,242 @@ import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
 import { Slider } from "@/components/ui/slider";
-import { Category } from "@/lib/types";
 
 interface ProductFilterProps {
-  categories?: Category[];
-  minPrice?: number;
-  maxPrice?: number;
+  categories: { id: string; name: string; slug: string }[];
+  colors: string[];
+  materials: string[];
+  patillaFlex: string[];
+  sexo: string[];
+  minPrice: number;
+  maxPrice: number;
 }
 
 export function ProductFilter({
-  categories = [],
-  minPrice = 0,
-  maxPrice = 200,
+  categories,
+  colors = [],
+  materials = [],
+  patillaFlex = [],
+  sexo = [],
+  minPrice,
+  maxPrice,
 }: ProductFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
+    categorias: false,
+    colores: false,
+    materiales: false,
+    patilla: false,
+    sexo: false,
+    precio: false
+  });
 
-  // Estado inicial con valores de la URL o predeterminados
-  const [selectedCategory, setSelectedCategory] = useState(
-    searchParams.get("category") || "all"
-  );
-  const [priceRange, setPriceRange] = useState([
-    parseInt(searchParams.get("minPrice") || minPrice.toString(), 10),
-    parseInt(searchParams.get("maxPrice") || maxPrice.toString(), 10),
-  ]);
-  const [isOpen, setIsOpen] = useState(false);
+  const [filters, setFilters] = useState({
+    category: searchParams.get("category") || "all",
+    color: searchParams.get("color") || "all",
+    material: searchParams.get("material") || "all",
+    patilla_flex: searchParams.get("patilla_flex") || "all",
+    sexo: searchParams.get("sexo") || "all",
+    minPrice: parseInt(searchParams.get("minPrice") || `${minPrice}`, 10),
+    maxPrice: parseInt(searchParams.get("maxPrice") || `${maxPrice}`, 10),
+  });
 
-  // Manejo de cambios
-  const handleCategoryChange = (value: string) => setSelectedCategory(value);
-  const handlePriceChange = (value: number[]) => setPriceRange(value);
-
-  // Aplicar filtros y actualizar la URL
-  const applyFilters = () => {
-    const params = new URLSearchParams();
-
-    if (selectedCategory !== "all") {
-      params.set("category", selectedCategory);
-    }
-
-    if (priceRange[0] !== minPrice) {
-      params.set("minPrice", priceRange[0].toString());
-    }
-
-    if (priceRange[1] !== maxPrice) {
-      params.set("maxPrice", priceRange[1].toString());
-    }
-
-    const queryString = params.toString();
-    router.push(`/products${queryString ? `?${queryString}` : ""}`);
-    setIsOpen(false);
+  const toggleSection = (section: string) => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section]
+    }));
   };
 
-  // Resetear filtros a los valores predeterminados
+  const handleFilterChange = (type: string, value: string | number) => {
+    setFilters(prev => ({ ...prev, [type]: value }));
+  };
+
+  const applyFilters = () => {
+    const params = new URLSearchParams();
+    Object.entries(filters).forEach(([key, value]) => {
+      if (value !== "all" && value !== minPrice && value !== maxPrice) {
+        params.set(key, value.toString());
+      }
+    });
+    router.push(`/products?${params.toString()}`);
+  };
+
   const resetFilters = () => {
-    setSelectedCategory("all");
-    setPriceRange([minPrice, maxPrice]);
+    setFilters({
+      category: "all",
+      color: "all",
+      material: "all",
+      patilla_flex: "all",
+      sexo: "all",
+      minPrice: minPrice,
+      maxPrice: maxPrice,
+    });
     router.push("/products");
-    setIsOpen(false);
   };
 
   return (
-    <Sheet open={isOpen} onOpenChange={setIsOpen}>
+    <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" size="sm" className="flex items-center gap-2">
+        <Button variant="outline" className="gap-2">
           <FilterIcon className="h-4 w-4" />
           Filtros
         </Button>
       </SheetTrigger>
-      <SheetContent side="left" className="w-[300px] sm:w-[400px]">
+      <SheetContent className="w-[300px] sm:w-[400px] h-full flex flex-col">
         <SheetHeader>
           <SheetTitle>Filtros</SheetTitle>
         </SheetHeader>
-        <Separator className="my-4" />
 
-        <div className="space-y-6">
-          {/* Categorías */}
-          <div className="space-y-3">
-            <h3 className="text-sm font-medium">Categorías</h3>
-            <RadioGroup
-              value={selectedCategory}
-              onValueChange={handleCategoryChange}
-              className="space-y-2"
-            >
-              {/* Opción "Todo" */}
-              <div className="flex items-center space-x-2">
-                <RadioGroupItem value="all" id="all" />
-                <Label
-                  htmlFor="all"
-                  className={selectedCategory === "all" ? "font-bold text-primary" : ""}
-                >
-                  Todo
-                </Label>
-              </div>
+        <div className="flex-1 overflow-y-auto space-y-6 mt-4 px-2">
+          {/* Sección Categorías */}
+          <FilterSection
+            title="Categorías"
+            expanded={expandedSections.categorias}
+            onToggle={() => toggleSection("categorias")}
+            options={categories.map(c => ({ value: c.slug, label: c.name }))}
+            selected={filters.category}
+            onChange={(value) => handleFilterChange("category", value)}
+          />
 
-              {/* Listado dinámico de categorías */}
-              {categories.map((category) => (
-                <div key={category.id} className="flex items-center space-x-2">
-                  <RadioGroupItem value={category.slug} id={category.slug} />
-                  <Label
-                    htmlFor={category.slug}
-                    className={selectedCategory === category.slug ? "font-bold text-primary" : ""}
-                  >
-                    {category.name}
-                  </Label>
-                </div>
-              ))}
-            </RadioGroup>
-          </div>
-
-          <Separator />
-
-          {/* Filtro de precios */}
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium">Rango de precios</h3>
-              <p className="text-xs text-muted-foreground">
-                ${priceRange[0]} - ${priceRange[1]}
-              </p>
-            </div>
-            <Slider
-              value={priceRange}
-              min={minPrice}
-              max={maxPrice}
-              step={5}
-              onValueChange={handlePriceChange}
-              className="py-4"
+          {/* Sección Colores */}
+          {colors.length > 0 && (
+            <FilterSection
+              title="Colores"
+              expanded={expandedSections.colores}
+              onToggle={() => toggleSection("colores")}
+              options={colors.map(c => ({ value: c, label: c }))}
+              selected={filters.color}
+              onChange={(value) => handleFilterChange("color", value)}
             />
-          </div>
+          )}
 
-          {/* Botones de acción */}
-          <div className="flex flex-col gap-2 pt-4">
-            <Button onClick={applyFilters}>Aplicar filtros</Button>
-            <Button variant="outline" onClick={resetFilters}>
-              Reiniciar filtros
-            </Button>
+          {/* Sección Materiales */}
+          {materials.length > 0 && (
+            <FilterSection
+              title="Materiales"
+              expanded={expandedSections.materiales}
+              onToggle={() => toggleSection("materiales")}
+              options={materials.map(m => ({ value: m, label: m }))}
+              selected={filters.material}
+              onChange={(value) => handleFilterChange("material", value)}
+            />
+          )}
+
+          {/* Sección Patilla Flex */}
+          {patillaFlex.length > 0 && (
+            <FilterSection
+              title="Patilla Flex"
+              expanded={expandedSections.patilla}
+              onToggle={() => toggleSection("patilla")}
+              options={patillaFlex.map(p => ({ value: p, label: p }))}
+              selected={filters.patilla_flex}
+              onChange={(value) => handleFilterChange("patilla_flex", value)}
+            />
+          )}
+
+          {/* Sección Sexo */}
+          {sexo.length > 0 && (
+            <FilterSection
+              title="Sexo"
+              expanded={expandedSections.sexo}
+              onToggle={() => toggleSection("sexo")}
+              options={sexo.map(s => ({ value: s, label: s }))}
+              selected={filters.sexo}
+              onChange={(value) => handleFilterChange("sexo", value)}
+            />
+          )}
+
+          {/* Sección Precio */}
+          <div className="space-y-4">
+            <button
+              onClick={() => toggleSection("precio")}
+              className="w-full flex justify-between items-center"
+            >
+              <h3 className="font-medium">Rango de Precio</h3>
+              {expandedSections.precio ? (
+                <ChevronUp className="h-5 w-5" />
+              ) : (
+                <ChevronDown className="h-5 w-5" />
+              )}
+            </button>
+            {expandedSections.precio && (
+              <div className="space-y-4">
+                <Slider
+                  value={[filters.minPrice, filters.maxPrice]}
+                  min={minPrice}
+                  max={maxPrice}
+                  step={50}
+                  onValueChange={(value) => {
+                    handleFilterChange("minPrice", value[0]);
+                    handleFilterChange("maxPrice", value[1]);
+                  }}
+                />
+                <div className="flex justify-between text-sm">
+                  <span>${filters.minPrice}</span>
+                  <span>${filters.maxPrice}</span>
+                </div>
+              </div>
+            )}
           </div>
+        </div>
+
+        {/* Botones de Acción */}
+        <div className="flex gap-2 p-4 border-t">
+          <Button onClick={applyFilters} className="flex-1">
+            Aplicar
+          </Button>
+          <Button variant="outline" onClick={resetFilters} className="flex-1">
+            Limpiar
+          </Button>
         </div>
       </SheetContent>
     </Sheet>
   );
 }
+
+const FilterSection = ({
+  title,
+  options,
+  selected,
+  onChange,
+  expanded,
+  onToggle
+}: {
+  title: string;
+  options: { value: string; label: string }[];
+  selected: string;
+  onChange: (value: string) => void;
+  expanded: boolean;
+  onToggle: () => void;
+}) => (
+  <div className="space-y-2">
+    <button
+      onClick={onToggle}
+      className="w-full flex justify-between items-center p-2 hover:bg-gray-100 rounded-lg"
+    >
+      <span className="font-medium">{title}</span>
+      {expanded ? (
+        <ChevronUp className="h-5 w-5" />
+      ) : (
+        <ChevronDown className="h-5 w-5" />
+      )}
+    </button>
+    {expanded && (
+      <div className="pl-2">
+        <RadioGroup value={selected} onValueChange={onChange}>
+          {options.map((option) => (
+            <div key={option.value} className="flex items-center space-x-2 py-1">
+              <RadioGroupItem value={option.value} id={option.value} />
+              <Label htmlFor={option.value} className="font-normal">
+                {option.label}
+              </Label>
+            </div>
+          ))}
+        </RadioGroup>
+        <Separator className="my-3" />
+      </div>
+    )}
+  </div>
+);
