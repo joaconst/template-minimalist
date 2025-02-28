@@ -41,12 +41,21 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                     onClick={() => setIsMenuOpen(false)}
                   >
                     <div className="flex items-center gap-2">
+                      {/* Logo para versión clara */}
                       <Image
-                        src="/logo-blanco.jpg" // Use Image component
-                        alt="Logo"
-                        className="h-8 w-auto"
-                        width={32} // Set width
-                        height={32} // Set height
+                        src="/logo-claro.jpg"
+                        alt="Logo Claro"
+                        className="h-8 w-auto dark:hidden"
+                        width={32}
+                        height={32}
+                      />
+                      {/* Logo para versión oscura */}
+                      <Image
+                        src="/logo-oscuro.jpg"
+                        alt="Logo Oscuro"
+                        className="h-8 w-auto hidden dark:block"
+                        width={32}
+                        height={32}
                       />
                       <span>{storeName}</span>
                     </div>
@@ -68,10 +77,19 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
             </Sheet>
             <Link href="/" className="hidden md:block">
               <div className="flex items-center gap-2">
+                {/* Logo para versión clara */}
                 <Image
-                  src="/logo-blanco.jpg" 
-                  alt="Logo"
-                  className="h-8 w-auto"
+                  src="/logo-claro.jpg"
+                  alt="Logo Claro"
+                  className="h-8 w-auto dark:hidden"
+                  width={50}
+                  height={50}
+                />
+                {/* Logo para versión oscura */}
+                <Image
+                  src="/logo-oscuro.jpg"
+                  alt="Logo Oscuro"
+                  className="h-8 w-auto hidden dark:block"
                   width={50}
                   height={50}
                 />
