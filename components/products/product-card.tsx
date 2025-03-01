@@ -39,10 +39,10 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
         </div>
-        <CardContent className="p-4">
+        <CardContent className="p-4 flex flex-col h-28">
           <h3 className="font-medium">{product.titulo}</h3>
-          <p className="mt-1 text-sm text-muted-foreground line-clamp-2">
-            {product.descripcion}
+          <p className="mt-1 text-sm text-muted-foreground line-clamp-2 flex-grow">
+            {product.descripcion || ""}
           </p>
           <p className="mt-2 font-medium">{formatPrice(product.precio)}</p>
         </CardContent>

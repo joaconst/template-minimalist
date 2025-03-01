@@ -26,9 +26,12 @@ export function FeaturedProducts({
     addToCart(product);
   };
 
+  // Normaliza los valores para ignorar mayúsculas/minúsculas
   const filteredProducts = selectedSexo === 'all' 
     ? products 
-    : products.filter(p => p.sexo === selectedSexo);
+    : products.filter(p => 
+        p.sexo?.toLowerCase() === selectedSexo.toLowerCase()
+      );
 
   return (
     <section className="py-16">
@@ -60,7 +63,13 @@ export function FeaturedProducts({
           </div>
         </div>
         
-        <ProductGrid products={filteredProducts} onAddToCart={handleAddToCart} />
+        {filteredProducts.length > 0 ? (
+          <ProductGrid products={filteredProducts} onAddToCart={handleAddToCart} />
+        ) : (
+          <p className="text-center text-muted-foreground">
+            No hay productos disponibles en esta categoría.
+          </p>
+        )}
       </Container>
     </section>
   );

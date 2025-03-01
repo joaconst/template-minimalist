@@ -32,7 +32,7 @@ export function Hero({
       
       <Container className="relative z-10 h-full flex items-center">
         <div className="max-w-3xl text-center md:text-left">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl text-primary">
             {title}
           </h1>
           
