@@ -11,8 +11,7 @@ interface FooterProps {
 
 export function Footer({
   storeName = "Spectra",
-  location = "XXXXXXXXXX",
-  email = "hello@spectra.com",
+  email = "spectraglasses42@gmail.com",
   phone = "+5493516222999",
 }: FooterProps) {
   const currentYear = new Date().getFullYear();
@@ -36,13 +35,13 @@ export function Footer({
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-                  De sol
+                <Link href="/products?sexo=masculino" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Lentes de hombre
                 </Link>
               </li>
               <li>
-                <Link href="/" className="text-muted-foreground hover:text-foreground transition-colors">
-                  Para ver
+                <Link href="/products?sexo=femenino" className="text-muted-foreground hover:text-foreground transition-colors">
+                  Lentes de mujer
                 </Link>
               </li>
             </ul>
@@ -75,10 +74,6 @@ export function Footer({
           <div className="space-y-4">
             <h3 className="text-lg font-medium">Contacto</h3>
             <ul className="space-y-2 text-sm">
-              <li className="flex items-start gap-2">
-                <MapPin className="h-4 w-4 mt-0.5 text-muted-foreground" />
-                <span className="text-muted-foreground">{location}</span>
-              </li>
               <li className="flex items-center gap-2">
                 <Mail className="h-4 w-4 text-muted-foreground" />
                 <a href={`mailto:${email}`} className="text-muted-foreground hover:text-foreground transition-colors">

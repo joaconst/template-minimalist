@@ -91,53 +91,78 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
-      <main className="flex-1 py-10">
+      <main className="flex-1 py-6 sm:py-10">
         <Container>
-          <Link href="/products" className="mb-6 inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
+          <Link href="/products" className="mb-4 sm:mb-6 inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground">
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a los productos
           </Link>
-          <div className="grid gap-8 md:grid-cols-2">
-            <div className="relative aspect-square bg-muted rounded-md overflow-hidden">
+          
+          <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
+            {/* Sección de imágenes */}
+            <div className="relative aspect-square bg-muted rounded-lg overflow-hidden">
               {images.length > 1 && (
-                <button onClick={handlePrevImage} className="absolute left-2 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white rounded-full">
-                  <ChevronLeft className="h-6 w-6" />
-                </button>
+                <>
+                  <button 
+                    onClick={handlePrevImage} 
+                    className="absolute left-2 sm:left-4 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-background/80 rounded-full shadow-sm hover:bg-background transition-colors"
+                  >
+                    <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </button>
+                  <button 
+                    onClick={handleNextImage} 
+                    className="absolute right-2 sm:right-4 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-background/80 rounded-full shadow-sm hover:bg-background transition-colors"
+                  >
+                    <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" />
+                  </button>
+                </>
               )}
               <Image
                 src={`${images[currentImageIndex]}`}
                 alt={product.titulo}
                 fill
                 className="object-cover"
-                sizes="(max-width: 768px) 100vw, 50vw"
+                sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 40vw"
                 priority
               />
-              {images.length > 1 && (
-                <button onClick={handleNextImage} className="absolute right-2 top-1/2 transform -translate-y-1/2 z-10 p-2 bg-white rounded-full">
-                  <ChevronRight className="h-6 w-6" />
-                </button>
-              )}
             </div>
-            <div className="flex flex-col">
-              <h1 className="text-3xl font-bold">{product.titulo}</h1>
-              <p className="mt-2 text-2xl font-medium">{formatPrice(product.precio)}</p>
-              <Separator className="my-6" />
-              <p className="text-muted-foreground">{product.descripcion}</p>
-              <div className="mt-6 space-y-4">
+
+            {/* Detalles del producto */}
+            <div className="flex flex-col space-y-4 sm:space-y-6">
+              <h1 className="text-2xl font-bold sm:text-3xl lg:text-4xl">
+                {product.titulo}
+              </h1>
+              <p className="text-xl font-medium sm:text-2xl">
+                {formatPrice(product.precio)}
+              </p>
+              
+              <Separator className="my-4 sm:my-6" />
+              
+              <p className="text-muted-foreground text-sm sm:text-base">
+                {product.descripcion}
+              </p>
+              
+              <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
                 <p><strong>Color:</strong> {product.color}</p>
                 <p><strong>Material:</strong> {product.material}</p>
                 <p><strong>Patilla Flex:</strong> {product.patilla_flex}</p>
                 <p><strong>Sexo:</strong> {product.sexo}</p>
               </div>
-              <div className="mt-8 flex flex-col space-y-4 sm:flex-row sm:space-x-4 sm:space-y-0">
-                <Button size="lg" className="flex-1" onClick={handleAddToCart}>
-                  <ShoppingCart className="mr-2 h-5 w-5" />
+
+              {/* Botones responsive */}
+              <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
+                <Button 
+                  size="lg" 
+                  className="flex-1 py-6 sm:py-4 text-sm sm:text-base"
+                  onClick={handleAddToCart}
+                >
+                  <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
                   Añadir al carrito
                 </Button>
                 <Button
                   size="lg"
-                  className="flex-1"
                   variant="outline"
+                  className="flex-1 py-6 sm:py-4 text-sm sm:text-base"
                   onClick={handleContactNow}
                 >
                   Contactar ahora
@@ -145,9 +170,13 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               </div>
             </div>
           </div>
+
+          {/* Productos relacionados */}
           {relatedProducts.length > 0 && (
-            <div className="mt-20">
-              <h2 className="mb-6 text-2xl font-bold">Productos relacionados</h2>
+            <div className="mt-12 sm:mt-16 lg:mt-20">
+              <h2 className="mb-4 sm:mb-6 text-xl font-bold sm:text-2xl">
+                Productos relacionados
+              </h2>
               <ProductGrid products={relatedProducts} />
             </div>
           )}
