@@ -10,8 +10,8 @@ import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
 import { useCart } from "@/components/cart/cart-context";
 import CartModal from "@/components/cart/cart-modal";
-import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { SearchModal } from "@/components/search-bar/search-modal";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 
 interface HeaderProps {
   storeName?: string;
