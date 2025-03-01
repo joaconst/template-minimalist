@@ -10,19 +10,13 @@ export async function getProducts(filters?: Record<string, any>): Promise<Produc
   if (filters) {
     // Aplicar filtros dinámicos
     if (filters.category && filters.category !== "all") {
-      query = query.eq("tipo", filters.category);
+      query = query.eq("categoria", filters.category);
     }
     if (filters.color && filters.color !== "all") {
       query = query.eq("color", filters.color);
     }
     if (filters.material && filters.material !== "all") {
       query = query.eq("material", filters.material);
-    }
-    if (filters.patilla_flex && filters.patilla_flex !== "all") {
-      query = query.eq("patilla_flex", filters.patilla_flex);
-    }
-    if (filters.sexo && filters.sexo !== "all") {
-      query = query.eq("sexo", filters.sexo);
     }
     if (filters.minPrice) {
       query = query.gte("precio", filters.minPrice);
@@ -88,8 +82,8 @@ export async function getCategories(): Promise<Category[]> {
     return [];
   }
 
-  const categories = (data as { tipo: string }[]).map((item) => {
-    const name = item.tipo;
+  const categories = (data as { categoria: string }[]).map((item) => {
+    const name = item.categoria;
     const slug = name.toLowerCase().replace(/\s+/g, "-");
     return { id: slug, name, slug };
   });
@@ -107,7 +101,7 @@ export async function getProductsByCategory(category: string): Promise<Product[]
   const { data, error } = await supabase
     .from("spectra")
     .select("*")
-    .eq("tipo", category);
+    .eq("categoria", category);
 
   if (error) {
     console.error("Error fetching products by category:", error.message);
@@ -141,18 +135,14 @@ export async function getUniqueValues(column: keyof Product): Promise<string[]> 
  * Obtiene todas las opciones de filtrado.
  */
 export async function getFilterOptions() {
-  const [colors, materials, patillaFlex, sexo] = await Promise.all([
+  const [colors, materials] = await Promise.all([
     getUniqueValues("color"),
     getUniqueValues("material"),
-    getUniqueValues("patilla_flex"),
-    getUniqueValues("sexo"),
   ]);
 
   return {
     colors,
     materials,
-    patillaFlex,
-    sexo,
   };
 }
 

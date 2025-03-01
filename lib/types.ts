@@ -4,8 +4,7 @@ export interface Product {
   descripcion: string;
   color: string;
   material: string;
-  patilla_flex: string;
-  sexo: string;
+  categoria: string;
   precio: number;
   tipo: string;
   imagen1: string;

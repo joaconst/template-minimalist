@@ -1,6 +1,6 @@
 "use client";
 
-import { ShoppingBag, Menu, Sun, Moon } from "lucide-react";
+import { ShoppingBag } from "lucide-react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import Image from "next/image";

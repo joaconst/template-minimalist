@@ -145,15 +145,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
               <div className="space-y-2 sm:space-y-3 text-sm sm:text-base">
                 <p><strong>Color:</strong> {product.color}</p>
                 <p><strong>Material:</strong> {product.material}</p>
-                <p><strong>Patilla Flex:</strong> {product.patilla_flex}</p>
-                <p><strong>Sexo:</strong> {product.sexo}</p>
+                <p><strong>Categoria:</strong> {product.categoria}</p>
               </div>
 
               {/* Botones responsive */}
               <div className="flex flex-col gap-3 sm:flex-row sm:gap-4">
                 <Button 
                   size="lg" 
-                  className="flex-1 py-6 sm:py-4 text-sm sm:text-base"
+                  className="flex-1 py-6 sm:py-4 text-sm sm:text-base border-2"
                   onClick={handleAddToCart}
                 >
                   <ShoppingCart className="mr-2 h-4 w-4 sm:h-5 sm:w-5" />
