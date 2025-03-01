@@ -20,14 +20,7 @@ interface HeaderProps {
 export function Header({ storeName = "Spectra" }: HeaderProps) {
   const { cartItems } = useCart();
   const cartCount = cartItems.length;
-  const { theme, resolvedTheme, setTheme } = useTheme();
-  const [isMounted, setIsMounted] = useState(false);
 
-  useEffect(() => {
-    setIsMounted(true);
-  }, []);
-
-  const currentTheme = isMounted ? resolvedTheme : 'light';
 
   return (
     <header className="sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -55,7 +48,7 @@ export function Header({ storeName = "Spectra" }: HeaderProps) {
                   key={route.href}
                   href={route.href}
                   className={cn(
-                    "text-sm font-medium text-muted-foreground transition-colors hover:text-foreground"
+                    "text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
                   )}
                 >
                   {route.label}

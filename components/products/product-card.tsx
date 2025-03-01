@@ -20,41 +20,47 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
-    if (onAddToCart) {
-      onAddToCart(product);
-    } else {
-      addToCart(product);
-    }
+    onAddToCart ? onAddToCart(product) : addToCart(product);
   };
 
   return (
-    <Link href={`/products/${product.id}`}>
-      <Card className="h-full overflow-hidden transition-all hover:shadow-md">
-        <div className="aspect-square relative bg-muted">
+    <Link
+      href={`/products/${product.id}`}
+      className="group block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
+    >
+      <Card className="h-full border-0 transition-transform group-hover:scale-[1.02]">
+        <div className="relative aspect-square bg-muted">
           <Image
-            src={product.imagen1}
+            src={product.imagen1 || "/placeholder-product.jpg"}
             alt={product.titulo}
             fill
-            className="object-cover transition-transform hover:scale-105"
-            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-opacity group-hover:opacity-90"
+            sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+            priority={false}
           />
         </div>
-        <CardContent className="p-4 flex flex-col h-28">
-          <h3 className="font-medium">{product.titulo}</h3>
-          <p className="mt-1 text-sm text-muted-foreground line-clamp-2 flex-grow">
-            {product.descripcion || ""}
+        
+        <CardContent className="p-4 space-y-2">
+          <h3 className="font-medium line-clamp-1">{product.titulo}</h3>
+          {product.descripcion && (
+            <p className="text-sm text-muted-foreground line-clamp-2">
+              {product.descripcion}
+            </p>
+          )}
+          <p className="text-lg font-semibold text-primary">
+            {formatPrice(product.precio)}
           </p>
-          <p className="mt-2 font-medium">{formatPrice(product.precio)}</p>
         </CardContent>
+
         <CardFooter className="p-4 pt-0">
           <Button
             onClick={handleAddToCart}
             variant="secondary"
-            className="w-full"
+            className="w-full gap-2"
             size="sm"
           >
-            <ShoppingCart className="mr-2 h-4 w-4" />
-            Añadir al carrito
+            <ShoppingCart className="h-4 w-4" />
+            Agregar al carrito
           </Button>
         </CardFooter>
       </Card>

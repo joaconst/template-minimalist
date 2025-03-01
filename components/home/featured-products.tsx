@@ -1,9 +1,9 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 import { Container } from "@/components/ui/container";
 import { ProductGrid } from "@/components/products/product-grid";
-import { Product } from "@/lib/types";
+import { Product, CartItem } from "@/lib/types";
 import { useCart } from "@/components/cart/cart-context";
 import { Button } from "@/components/ui/button";
 
@@ -11,27 +11,49 @@ interface FeaturedProductsProps {
   title?: string;
   description?: string;
   products: Product[];
-  onAddToCart?: (product: Product) => void;
 }
 
 export function FeaturedProducts({
   title = "Productos destacados",
-  description = "XXXXXXXXXXXXXX",
+  description = "Nuestras selecciones especiales",
   products,
 }: FeaturedProductsProps) {
   const { addToCart } = useCart();
-  const [selectedSexo, setSelectedSexo] = useState<string>('all');
-  
+  const [selectedCategory, setSelectedCategory] = useState<string>('all');
+
+  // Extraer categorías únicas con slugs consistentes
+  const categories = useMemo(() => {
+    const categoryMap = new Map<string, string>();
+    products.forEach(product => {
+      const rawCategory = product.categoria?.trim();
+      if (rawCategory) {
+        const slug = rawCategory.toLowerCase().replace(/\s+/g, '-');
+        if (!categoryMap.has(slug)) {
+          categoryMap.set(slug, rawCategory);
+        }
+      }
+    });
+    return Array.from(categoryMap.entries()).map(([slug, name]) => ({
+      slug,
+      name,
+    }));
+  }, [products]);
+
   const handleAddToCart = (product: Product) => {
-    addToCart(product);
+    const cartItem: CartItem = {
+      ...product,
+      quantity: 1
+    };
+    addToCart(cartItem);
   };
 
-  // Normaliza los valores para ignorar mayúsculas/minúsculas
-  const filteredProducts = selectedSexo === 'all' 
+  // Filtrado correcto usando slugs
+  const filteredProducts = selectedCategory === 'all' 
     ? products 
-    : products.filter(p => 
-        p.sexo?.toLowerCase() === selectedSexo.toLowerCase()
-      );
+    : products.filter(p => {
+        const productSlug = p.categoria?.toLowerCase().replace(/\s+/g, '-');
+        return productSlug === selectedCategory.toLowerCase();
+      });
 
   return (
     <section className="py-16">
@@ -40,34 +62,36 @@ export function FeaturedProducts({
           <h2 className="text-3xl font-bold">{title}</h2>
           <p className="mt-4 text-muted-foreground">{description}</p>
           
-          {/* Selector de sexo */}
-          <div className="mt-6 flex justify-center gap-2">
+          {/* Selector de categorías mejorado */}
+          <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button
-              variant={selectedSexo === 'all' ? 'default' : 'outline'}
-              onClick={() => setSelectedSexo('all')}
+              variant={selectedCategory === 'all' ? 'default' : 'outline'}
+              onClick={() => setSelectedCategory('all')}
+              className="transition-all duration-300"
             >
-              Todos
+              Todas
             </Button>
-            <Button
-              variant={selectedSexo === 'masculino' ? 'default' : 'outline'}
-              onClick={() => setSelectedSexo('masculino')}
-            >
-              Masculino
-            </Button>
-            <Button
-              variant={selectedSexo === 'femenino' ? 'default' : 'outline'}
-              onClick={() => setSelectedSexo('femenino')}
-            >
-              Femenino
-            </Button>
+            {categories.map(category => (
+              <Button
+                key={category.slug}
+                variant={selectedCategory === category.slug ? 'default' : 'outline'}
+                onClick={() => setSelectedCategory(category.slug)}
+                className="transition-all duration-300"
+              >
+                {category.name}
+              </Button>
+            ))}
           </div>
         </div>
         
         {filteredProducts.length > 0 ? (
-          <ProductGrid products={filteredProducts} onAddToCart={handleAddToCart} />
+          <ProductGrid 
+            products={filteredProducts} 
+            onAddToCart={handleAddToCart}
+          />
         ) : (
           <p className="text-center text-muted-foreground">
-            No hay productos disponibles en esta categoría.
+            No hay productos destacados en esta categoría
           </p>
         )}
       </Container>

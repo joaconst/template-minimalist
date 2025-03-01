@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Filter as FilterIcon, ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
@@ -11,83 +11,82 @@ import {
   SheetTitle,
   SheetTrigger,
 } from "@/components/ui/sheet";
-import { Separator } from "@/components/ui/separator";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
-import { Slider } from "@/components/ui/slider";
+import { getFilterOptions } from "@/lib/data";
+import { Category } from "@/lib/types";
 
-// Función para capitalizar palabras
 const capitalizeWords = (str: string) => {
   return str.toLowerCase().replace(/\b\w/g, (char) => char.toUpperCase());
 };
 
 interface ProductFilterProps {
-  categories: { id: string; name: string; slug: string }[];
-  colors: string[];
-  materials: string[];
-  patillaFlex: string[];
-  sexo: string[];
-  minPrice: number;
-  maxPrice: number;
+  categories: Category[];
 }
 
-export function ProductFilter({
-  categories,
-  colors = [],
-  materials = [],
-  patillaFlex = [],
-  sexo = [],
-  minPrice,
-  maxPrice,
-}: ProductFilterProps) {
+export function ProductFilter({ categories }: ProductFilterProps) {
   const router = useRouter();
   const searchParams = useSearchParams();
+  const [filterOptions, setFilterOptions] = useState<{
+    colors: string[];
+    materials: string[];
+    formas: string[];
+    colorLentes: string[];
+  }>({ colors: [], materials: [], formas: [], colorLentes: [] });
+
   const [expandedSections, setExpandedSections] = useState<Record<string, boolean>>({
-    categorias: false,
+    categorias: true,
     colores: false,
     materiales: false,
-    patilla: false,
-    sexo: false,
-    precio: true
+    formas: false
   });
 
   const [filters, setFilters] = useState({
-    category: searchParams.get("category") || "all",
-    color: searchParams.get("color") || "all",
+    categoria: searchParams.get("categoria") || "all",
+    color_vidrio: searchParams.get("color_vidrio") || "all",
     material: searchParams.get("material") || "all",
-    patilla_flex: searchParams.get("patilla_flex") || "all",
-    sexo: searchParams.get("sexo") || "all",
-    minPrice: parseInt(searchParams.get("minPrice") || `${minPrice}`, 10),
-    maxPrice: parseInt(searchParams.get("maxPrice") || `${maxPrice}`, 10),
+    forma: searchParams.get("forma") || "all",
   });
+
+  useEffect(() => {
+    const loadFilterOptions = async () => {
+      const options = await getFilterOptions();
+      setFilterOptions({
+        colors: options.colors,
+        materials: options.materials,
+        formas: options.formas,
+        colorLentes: options.colorLentes
+      });
+    };
+    loadFilterOptions();
+  }, []);
 
   const toggleSection = (section: string) => {
     setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
   };
 
-  const handleFilterChange = (type: string, value: string | number) => {
+  const handleFilterChange = (type: string, value: string) => {
     setFilters(prev => ({ ...prev, [type]: value }));
   };
 
   const applyFilters = () => {
     const params = new URLSearchParams();
+
     Object.entries(filters).forEach(([key, value]) => {
-      if (value !== "all" && value !== minPrice && value !== maxPrice) {
-        params.set(key, value.toString());
+      if (value !== "all") {
+        params.set(key, value);
       }
     });
+
     router.push(`/products?${params.toString()}`);
   };
 
   const resetFilters = () => {
     setFilters({
-      category: "all",
-      color: "all",
+      categoria: "all",
+      color_vidrio: "all",
       material: "all",
-      patilla_flex: "all",
-      sexo: "all",
-      minPrice: minPrice,
-      maxPrice: maxPrice,
+      forma: "all",
     });
     router.push("/products");
   };
@@ -106,114 +105,55 @@ export function ProductFilter({
         </SheetHeader>
 
         <div className="flex-1 overflow-y-auto space-y-6 mt-4 px-2">
-          {/* Sección Categorías */}
           <FilterSection
             title="Categorías"
             expanded={expandedSections.categorias}
             onToggle={() => toggleSection("categorias")}
-            options={categories.map(c => ({ 
-              value: c.slug, 
-              label: capitalizeWords(c.name) 
+            options={categories.map(c => ({
+              value: c.slug,
+              label: capitalizeWords(c.name)
             }))}
-            selected={filters.category}
-            onChange={(value) => handleFilterChange("category", value)}
+            selected={filters.categoria}
+            onChange={(value) => handleFilterChange("categoria", value)}
           />
 
-          {/* Sección Colores */}
-          {colors.length > 0 && (
-            <FilterSection
-              title="Colores"
-              expanded={expandedSections.colores}
-              onToggle={() => toggleSection("colores")}
-              options={colors.map(c => ({ 
-                value: c, 
-                label: capitalizeWords(c) 
-              }))}
-              selected={filters.color}
-              onChange={(value) => handleFilterChange("color", value)}
-            />
-          )}
+          <FilterSection
+            title="Color del Vidrio"
+            expanded={expandedSections.colores}
+            onToggle={() => toggleSection("colores")}
+            options={filterOptions.colors.map(c => ({
+              value: c,
+              label: capitalizeWords(c)
+            }))}
+            selected={filters.color_vidrio}
+            onChange={(value) => handleFilterChange("color_vidrio", value)}
+          />
 
-          {/* Sección Materiales */}
-          {materials.length > 0 && (
-            <FilterSection
-              title="Materiales"
-              expanded={expandedSections.materiales}
-              onToggle={() => toggleSection("materiales")}
-              options={materials.map(m => ({ 
-                value: m, 
-                label: capitalizeWords(m) 
-              }))}
-              selected={filters.material}
-              onChange={(value) => handleFilterChange("material", value)}
-            />
-          )}
+          <FilterSection
+            title="Materiales"
+            expanded={expandedSections.materiales}
+            onToggle={() => toggleSection("materiales")}
+            options={filterOptions.materials.map(m => ({
+              value: m,
+              label: capitalizeWords(m)
+            }))}
+            selected={filters.material}
+            onChange={(value) => handleFilterChange("material", value)}
+          />
 
-          {/* Sección Patilla Flex */}
-          {patillaFlex.length > 0 && (
-            <FilterSection
-              title="Patilla Flex"
-              expanded={expandedSections.patilla}
-              onToggle={() => toggleSection("patilla")}
-              options={patillaFlex.map(p => ({ 
-                value: p, 
-                label: capitalizeWords(p) 
-              }))}
-              selected={filters.patilla_flex}
-              onChange={(value) => handleFilterChange("patilla_flex", value)}
-            />
-          )}
-
-          {/* Sección Sexo */}
-          {sexo.length > 0 && (
-            <FilterSection
-              title="Sexo"
-              expanded={expandedSections.sexo}
-              onToggle={() => toggleSection("sexo")}
-              options={sexo.map(s => ({ 
-                value: s, 
-                label: capitalizeWords(s) 
-              }))}
-              selected={filters.sexo}
-              onChange={(value) => handleFilterChange("sexo", value)}
-            />
-          )}
-
-          {/* Sección Precio */}
-          <div className="space-y-4">
-            <button
-              onClick={() => toggleSection("precio")}
-              className="w-full flex justify-between items-center"
-            >
-              <h3 className="font-medium">Rango de Precio</h3>
-              {expandedSections.precio ? (
-                <ChevronUp className="h-5 w-5" />
-              ) : (
-                <ChevronDown className="h-5 w-5" />
-              )}
-            </button>
-            {expandedSections.precio && (
-              <div className="space-y-4">
-                <Slider
-                  value={[filters.minPrice, filters.maxPrice]}
-                  min={minPrice}
-                  max={maxPrice}
-                  step={50}
-                  onValueChange={(value) => {
-                    handleFilterChange("minPrice", value[0]);
-                    handleFilterChange("maxPrice", value[1]);
-                  }}
-                />
-                <div className="flex justify-between text-sm">
-                  <span>${filters.minPrice}</span>
-                  <span>${filters.maxPrice}</span>
-                </div>
-              </div>
-            )}
-          </div>
+          <FilterSection
+            title="Formas"
+            expanded={expandedSections.formas}
+            onToggle={() => toggleSection("formas")}
+            options={filterOptions.formas.map(f => ({
+              value: f,
+              label: capitalizeWords(f)
+            }))}
+            selected={filters.forma}
+            onChange={(value) => handleFilterChange("forma", value)}
+          />
         </div>
 
-        {/* Botones de Acción */}
         <div className="flex gap-2 p-4 border-t">
           <Button onClick={applyFilters} className="flex-1">
             Aplicar
@@ -243,30 +183,25 @@ const FilterSection = ({
   onToggle: () => void;
 }) => (
   <div className="space-y-2">
-    <button
-      onClick={onToggle}
-      className="w-full flex justify-between items-center p-2 hover:bg-black/10 dark:hover:bg-white/10 rounded-lg"
-    >
+    <button onClick={onToggle} className="w-full flex justify-between items-center p-2">
       <span className="font-medium">{title}</span>
-      {expanded ? (
-        <ChevronUp className="h-5 w-5" />
-      ) : (
-        <ChevronDown className="h-5 w-5" />
-      )}
+      {expanded ? <ChevronUp /> : <ChevronDown />}
     </button>
     {expanded && (
       <div className="pl-2">
         <RadioGroup value={selected} onValueChange={onChange}>
           {options.map((option) => (
             <div key={option.value} className="flex items-center space-x-2 py-1">
-              <RadioGroupItem value={option.value} id={option.value} />
-              <Label htmlFor={option.value} className="font-normal">
+              <RadioGroupItem
+                value={option.value}
+                id={option.value}
+              />
+              <Label htmlFor={option.value}>
                 {option.label}
               </Label>
             </div>
           ))}
         </RadioGroup>
-        <Separator className="my-3" />
       </div>
     )}
   </div>

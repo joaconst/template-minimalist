@@ -14,48 +14,90 @@ export default function ProductsPage() {
   const searchParams = useSearchParams();
   const [products, setProducts] = useState<Product[]>([]);
   const [categories, setCategories] = useState<Category[]>([]);
-  const [filterOptions, setFilterOptions] = useState<{
-    colors: string[];
-    materials: string[];
-    patillaFlex: string[];
-    sexo: string[];
-  }>({ colors: [], materials: [], patillaFlex: [], sexo: [] });
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [priceRange, setPriceRange] = useState<{ minPrice: number; maxPrice: number }>({
+    minPrice: 0,
+    maxPrice: 0
+  });
 
   useEffect(() => {
+    let isMounted = true;
+    
     const fetchData = async () => {
-      const [filterOptions, categories, products] = await Promise.all([
-        getFilterOptions(),
-        getCategories(),
-        getProducts(Object.fromEntries(searchParams.entries())),
-      ]);
-      
-      setFilterOptions(filterOptions);
-      setCategories(categories);
-      setProducts(products);
+      try {
+        setLoading(true);
+        setError(null);
+
+        const [filterOptionsData, categoriesData] = await Promise.all([
+          getFilterOptions(),
+          getCategories()
+        ]);
+
+        if (isMounted) {
+          setPriceRange(filterOptionsData);
+          setCategories(categoriesData);
+        }
+
+        const productsData = await getProducts(Object.fromEntries(searchParams.entries()));
+        
+        if (isMounted) {
+          setProducts(productsData);
+          if (productsData.length === 0) {
+            setError("No se encontraron productos con los filtros aplicados");
+          }
+        }
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        if (isMounted) {
+          setError("Error al cargar los productos. Por favor intenta de nuevo.");
+        }
+      } finally {
+        if (isMounted) {
+          setLoading(false);
+        }
+      }
     };
 
     fetchData();
+
+    return () => {
+      isMounted = false;
+    };
   }, [searchParams]);
+
+  if (error) {
+    return (
+      <div className="flex min-h-screen flex-col">
+        <Header />
+        <main className="flex-1 py-10">
+          <Container>
+            <div className="text-center text-red-500">{error}</div>
+          </Container>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   return (
     <div className="flex min-h-screen flex-col">
       <Header />
       <main className="flex-1 py-10">
         <Container>
-          <div className="mb-8 flex items-center justify-between">
+          <div className="mb-8 flex items-center justify-between flex-col sm:flex-row gap-4">
             <h1 className="text-3xl font-bold">Productos</h1>
-            <ProductFilter 
+            <ProductFilter
               categories={categories}
-              colors={filterOptions.colors}
-              materials={filterOptions.materials}
-              patillaFlex={filterOptions.patillaFlex}
-              sexo={filterOptions.sexo}
-              minPrice={0}
-              maxPrice={2000}
+              minPrice={priceRange.minPrice}
+              maxPrice={priceRange.maxPrice}
             />
           </div>
           
-          <ProductGrid products={products} />
+          <ProductGrid 
+            products={products} 
+            isLoading={loading}
+          />
         </Container>
       </main>
       <Footer />
