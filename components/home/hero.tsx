@@ -20,28 +20,43 @@ export function Hero({
   backgroundImage,
 }: HeroProps) {
   return (
-    <section className="h-screen relative py-20 md:py-28">
+    <section className="relative min-h-[80vh] md:min-h-screen py-16 md:py-28 lg:py-32">
       {backgroundImage && (
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: `url(${backgroundImage})` }}
         >
-          <div className="absolute inset-0 bg-background/70" />
+          <div className="absolute inset-0 bg-background/70 md:bg-background/60" />
         </div>
       )}
-      <Container className="relative z-10">
-        <div className="max-w-3xl">
-          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl">
+      
+      <Container className="relative z-10 h-full flex items-center">
+        <div className="max-w-3xl text-center md:text-left">
+          <h1 className="text-4xl font-bold tracking-tight sm:text-5xl md:text-6xl lg:text-7xl">
             {title}
           </h1>
-          <p className="mt-6 text-lg text-muted-foreground md:text-xl">
+          
+          <p className="mt-4 md:mt-6 text-base md:text-lg lg:text-xl text-muted-foreground max-w-2xl mx-auto md:mx-0">
             {description}
           </p>
-          <div className="mt-8 flex">
-            <Button asChild size="lg">
-              <Link href={ctaLink}>{ctaText}</Link>
+
+          <div className="mt-6 md:mt-8 flex flex-col md:flex-row gap-4 md:gap-6 justify-center md:justify-start">
+            <Button 
+              asChild 
+              size="lg" 
+              className="w-full md:w-auto px-8 py-6 text-sm md:text-base"
+            >
+              <Link href={ctaLink}>
+                {ctaText}
+              </Link>
             </Button>
-            <Button asChild size="lg" className="ml-4">
+            
+            <Button 
+              asChild 
+              size="lg" 
+              variant="outline" 
+              className="w-full md:w-auto px-8 py-6 text-sm md:text-base"
+            >
               <a
                 href={`https://wa.me/${ctaCont.replace("+", "")}`}
                 target="_blank"
