@@ -100,21 +100,10 @@ export function Footer({
             </div>
           </div>
         </div>
-        <div className="flex flex-col items-center justify-between border-t py-6 md:flex-row">
+        <div className="flex items-center justify-center border-t py-6 md:flex-row">
           <p className="text-xs text-muted-foreground">
             &copy; {currentYear} {storeName}. All rights reserved.
           </p>
-          <div className="mt-4 flex items-center gap-4 md:mt-0">
-            <Link href="/terms" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Terms
-            </Link>
-            <Link href="/privacy" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Privacy
-            </Link>
-            <Link href="/cookies" className="text-xs text-muted-foreground hover:text-foreground transition-colors">
-              Cookies
-            </Link>
-          </div>
         </div>
       </Container>
     </footer>
