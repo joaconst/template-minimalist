@@ -16,31 +16,26 @@ export default function ProductsPage() {
   const [categories, setCategories] = useState<Category[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-  const [priceRange, setPriceRange] = useState<{ minPrice: number; maxPrice: number }>({
-    minPrice: 0,
-    maxPrice: 0
-  });
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchData = async () => {
       try {
         setLoading(true);
         setError(null);
 
-        const [filterOptionsData, categoriesData] = await Promise.all([
+        const [_, categoriesData] = await Promise.all([
           getFilterOptions(),
-          getCategories()
+          getCategories(),
         ]);
 
         if (isMounted) {
-          setPriceRange(filterOptionsData);
           setCategories(categoriesData);
         }
 
         const productsData = await getProducts(Object.fromEntries(searchParams.entries()));
-        
+
         if (isMounted) {
           setProducts(productsData);
           if (productsData.length === 0) {
@@ -87,17 +82,10 @@ export default function ProductsPage() {
         <Container>
           <div className="mb-8 flex items-center justify-between flex-col sm:flex-row gap-4">
             <h1 className="text-3xl font-bold">Productos</h1>
-            <ProductFilter
-              categories={categories}
-              minPrice={priceRange.minPrice}
-              maxPrice={priceRange.maxPrice}
-            />
+            <ProductFilter categories={categories} />
           </div>
-          
-          <ProductGrid 
-            products={products} 
-            isLoading={loading}
-          />
+
+          <ProductGrid products={products} isLoading={loading} />
         </Container>
       </main>
       <Footer />

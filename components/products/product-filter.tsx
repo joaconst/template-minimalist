@@ -38,7 +38,7 @@ export function ProductFilter({ categories }: ProductFilterProps) {
     categorias: true,
     colores: false,
     materiales: false,
-    formas: false
+    formas: false,
   });
 
   const [filters, setFilters] = useState({
@@ -55,18 +55,18 @@ export function ProductFilter({ categories }: ProductFilterProps) {
         colors: options.colors,
         materials: options.materials,
         formas: options.formas,
-        colorLentes: options.colorLentes
+        colorLentes: options.colorLentes,
       });
     };
     loadFilterOptions();
   }, []);
 
   const toggleSection = (section: string) => {
-    setExpandedSections(prev => ({ ...prev, [section]: !prev[section] }));
+    setExpandedSections((prev) => ({ ...prev, [section]: !prev[section] }));
   };
 
   const handleFilterChange = (type: string, value: string) => {
-    setFilters(prev => ({ ...prev, [type]: value }));
+    setFilters((prev) => ({ ...prev, [type]: value }));
   };
 
   const applyFilters = () => {
@@ -109,10 +109,13 @@ export function ProductFilter({ categories }: ProductFilterProps) {
             title="Categorías"
             expanded={expandedSections.categorias}
             onToggle={() => toggleSection("categorias")}
-            options={categories.map(c => ({
-              value: c.slug,
-              label: capitalizeWords(c.name)
-            }))}
+            options={[
+              { value: "all", label: "Todos" },
+              ...categories.map((c) => ({
+                value: c.slug,
+                label: capitalizeWords(c.name),
+              })),
+            ]}
             selected={filters.categoria}
             onChange={(value) => handleFilterChange("categoria", value)}
           />
@@ -121,10 +124,13 @@ export function ProductFilter({ categories }: ProductFilterProps) {
             title="Color del Vidrio"
             expanded={expandedSections.colores}
             onToggle={() => toggleSection("colores")}
-            options={filterOptions.colors.map(c => ({
-              value: c,
-              label: capitalizeWords(c)
-            }))}
+            options={[
+              { value: "all", label: "Todos" },
+              ...filterOptions.colors.map((c) => ({
+                value: c,
+                label: capitalizeWords(c),
+              })),
+            ]}
             selected={filters.color_vidrio}
             onChange={(value) => handleFilterChange("color_vidrio", value)}
           />
@@ -133,10 +139,13 @@ export function ProductFilter({ categories }: ProductFilterProps) {
             title="Materiales"
             expanded={expandedSections.materiales}
             onToggle={() => toggleSection("materiales")}
-            options={filterOptions.materials.map(m => ({
-              value: m,
-              label: capitalizeWords(m)
-            }))}
+            options={[
+              { value: "all", label: "Todos" },
+              ...filterOptions.materials.map((m) => ({
+                value: m,
+                label: capitalizeWords(m),
+              })),
+            ]}
             selected={filters.material}
             onChange={(value) => handleFilterChange("material", value)}
           />
@@ -145,10 +154,13 @@ export function ProductFilter({ categories }: ProductFilterProps) {
             title="Formas"
             expanded={expandedSections.formas}
             onToggle={() => toggleSection("formas")}
-            options={filterOptions.formas.map(f => ({
-              value: f,
-              label: capitalizeWords(f)
-            }))}
+            options={[
+              { value: "all", label: "Todos" },
+              ...filterOptions.formas.map((f) => ({
+                value: f,
+                label: capitalizeWords(f),
+              })),
+            ]}
             selected={filters.forma}
             onChange={(value) => handleFilterChange("forma", value)}
           />
@@ -173,7 +185,7 @@ const FilterSection = ({
   selected,
   onChange,
   expanded,
-  onToggle
+  onToggle,
 }: {
   title: string;
   options: { value: string; label: string }[];
@@ -192,13 +204,8 @@ const FilterSection = ({
         <RadioGroup value={selected} onValueChange={onChange}>
           {options.map((option) => (
             <div key={option.value} className="flex items-center space-x-2 py-1">
-              <RadioGroupItem
-                value={option.value}
-                id={option.value}
-              />
-              <Label htmlFor={option.value}>
-                {option.label}
-              </Label>
+              <RadioGroupItem value={option.value} id={option.value} />
+              <Label htmlFor={option.value}>{option.label}</Label>
             </div>
           ))}
         </RadioGroup>
