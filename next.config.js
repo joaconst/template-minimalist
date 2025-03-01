@@ -4,7 +4,14 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   images: {
-    domains: ["unsplash.com", "images.unsplash.com", "drive.google.com"]
+    domains: ["unsplash.com", "images.unsplash.com", "drive.google.com"],
+  },
+  webpack: (config) => {
+    config.resolve.fallback = {
+      bufferutil: false,
+      "utf-8-validate": false,
+    };
+    return config;
   },
 };
 
