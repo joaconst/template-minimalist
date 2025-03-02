@@ -29,12 +29,12 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   useEffect(() => {
     let isMounted = true;
-    
+
     const fetchProduct = async () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         const foundProduct = await getProductById(params.id);
         if (!isMounted) return;
 
@@ -64,11 +64,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     };
   }, [params.id, router]);
 
-  const images = product ? [
-    product.imagen1,
-    product.imagen2,
-    product.imagen3
-  ].filter(Boolean) : [];
+  const images = product
+    ? [product.imagen1, product.imagen2, product.imagen3].filter(Boolean)
+    : [];
 
   const handleImageNavigation = (index: number) => {
     setCurrentImageIndex(index);
@@ -78,7 +76,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     if (product) {
       const cartItem: CartItem = {
         ...product,
-        quantity: 1
+        quantity: 1,
       };
       addToCart(cartItem);
     }
@@ -90,6 +88,9 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
+
+  // Obtener filtros guardados en localStorage
+  const savedFilters = JSON.parse(localStorage.getItem("productFilters") || "{}");
 
   if (error) {
     return (
@@ -137,8 +138,11 @@ export default function ProductPage({ params }: { params: { id: string } }) {
       <Header />
       <main className="flex-1 py-6 sm:py-10">
         <Container>
-          <Link 
-            href="/products" 
+          <Link
+            href={{
+              pathname: "/products",
+              query: savedFilters,
+            }}
             className="mb-4 sm:mb-6 inline-flex items-center text-sm font-medium text-muted-foreground hover:text-foreground transition-colors"
           >
             <ArrowLeft className="mr-2 h-4 w-4" />

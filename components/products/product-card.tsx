@@ -28,7 +28,7 @@ export function ProductCard({ product, onAddToCart }: ProductCardProps) {
       href={`/products/${product.id}`}
       className="group block overflow-hidden rounded-lg transition-shadow hover:shadow-lg"
     >
-      <Card className="h-full border-0 transition-transform group-hover:scale-[1.02]">
+      <Card className="h-full transition-transform group-hover:scale-[1.02] p-2 border border-secondary-foreground/20">
         <div className="relative aspect-square bg-muted">
           <Image
             src={product.imagen1 || "/placeholder-product.jpg"}

@@ -7,7 +7,7 @@ const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Spectra - Lentes",
-  description: "xxxxxxxxxxxx",
+  description: "Somos una empresa familiar dedicada a la importación de lentes de sol y armazones de receta, de excelente calidad y al mejor precio de mercado.",
 };
 
 export default function RootLayout({

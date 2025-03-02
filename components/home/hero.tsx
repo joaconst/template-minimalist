@@ -13,14 +13,14 @@ interface HeroProps {
 
 export function Hero({
   title = "Lentes Spectra",
-  description = "Mini descripción",
+  description = "Somos una empresa familiar dedicada a la importación de lentes de sol y armazones de receta, de excelente calidad y al mejor precio de mercado.",
   ctaText = "Ver todos los productos",
-  ctaCont = "+5493516222999",
+  ctaCont = "5493516222999",
   ctaLink = "/products",
   backgroundImage,
 }: HeroProps) {
   return (
-    <section className="relative min-h-[80vh] md:min-h-screen py-16 md:py-28 lg:py-32">
+    <section id="" className="relative min-h-screen md:min-h-screen py-16 md:py-28 lg:py-32">
       {backgroundImage && (
         <div
           className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat"

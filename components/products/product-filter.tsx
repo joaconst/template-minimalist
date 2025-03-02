@@ -41,6 +41,7 @@ export function ProductFilter({ categories }: ProductFilterProps) {
     formas: false,
   });
 
+  // Estado inicial de los filtros desde localStorage o searchParams
   const [filters, setFilters] = useState({
     categoria: searchParams.get("categoria") || "all",
     color_vidrio: searchParams.get("color_vidrio") || "all",
@@ -48,6 +49,7 @@ export function ProductFilter({ categories }: ProductFilterProps) {
     forma: searchParams.get("forma") || "all",
   });
 
+  // Cargar opciones de filtro
   useEffect(() => {
     const loadFilterOptions = async () => {
       const options = await getFilterOptions();
@@ -59,6 +61,19 @@ export function ProductFilter({ categories }: ProductFilterProps) {
       });
     };
     loadFilterOptions();
+  }, []);
+
+  // Guardar filtros en localStorage cuando cambian
+  useEffect(() => {
+    localStorage.setItem("productFilters", JSON.stringify(filters));
+  }, [filters]);
+
+  // Recuperar filtros del localStorage al cargar el componente
+  useEffect(() => {
+    const savedFilters = localStorage.getItem("productFilters");
+    if (savedFilters) {
+      setFilters(JSON.parse(savedFilters));
+    }
   }, []);
 
   const toggleSection = (section: string) => {
@@ -78,6 +93,8 @@ export function ProductFilter({ categories }: ProductFilterProps) {
       }
     });
 
+    // Guardar en el historial y navegar
+    window.history.replaceState(null, "", `?${params.toString()}`);
     router.push(`/products?${params.toString()}`);
   };
 
@@ -88,13 +105,14 @@ export function ProductFilter({ categories }: ProductFilterProps) {
       material: "all",
       forma: "all",
     });
+    localStorage.removeItem("productFilters");
     router.push("/products");
   };
 
   return (
     <Sheet>
       <SheetTrigger asChild>
-        <Button variant="outline" className="gap-2">
+        <Button variant="outline" className="gap-2 hover:bg-primary">
           <FilterIcon className="h-4 w-4" />
           Filtros
         </Button>
@@ -170,7 +188,7 @@ export function ProductFilter({ categories }: ProductFilterProps) {
           <Button onClick={applyFilters} className="flex-1">
             Aplicar
           </Button>
-          <Button variant="outline" onClick={resetFilters} className="flex-1">
+          <Button variant="outline" onClick={resetFilters} className="flex-1 hover:bg-primary">
             Limpiar
           </Button>
         </div>
@@ -197,7 +215,7 @@ const FilterSection = ({
   <div className="space-y-2">
     <button onClick={onToggle} className="w-full flex justify-between items-center p-2">
       <span className="font-medium">{title}</span>
-      {expanded ? <ChevronUp /> : <ChevronDown />}
+      {expanded ? <ChevronUp className="text-primary" /> : <ChevronDown />}
     </button>
     {expanded && (
       <div className="pl-2">

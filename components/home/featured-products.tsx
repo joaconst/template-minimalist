@@ -56,7 +56,7 @@ export function FeaturedProducts({
       });
 
   return (
-    <section className="py-16">
+    <section id="featured" className="py-16">
       <Container>
         <div className="mb-10 text-center">
           <h2 className="text-3xl font-bold">{title}</h2>
