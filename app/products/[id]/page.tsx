@@ -17,6 +17,7 @@ import { Product } from "@/lib/types";
 import { useCart } from "@/components/cart/cart-context";
 import { CartItem } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
+import { url } from "@/lib/utils/url";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -74,14 +75,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
 
   const handleAddToCart = () => {
     if (product) {
+      // Genera el link si no existe
+      const productLink = product.link || `${url}${product.id}`;
+      
       const cartItem: CartItem = {
         ...product,
         quantity: 1,
+        link: productLink // Asegura que siempre tenga un valor
       };
       addToCart(cartItem);
     }
   };
-
   const handleContactNow = () => {
     const message = `Hola, me interesa el producto: ${product?.titulo} (${window.location.href}). ¿Podrías darme más información?`;
     const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5493516222999";

@@ -2,6 +2,7 @@
 
 import { createContext, useContext, useState, useEffect } from "react";
 import { Product, CartItem } from "@/lib/types";
+import { url } from "@/lib/utils/url";
 
 interface CartContextProps {
   cartItems: CartItem[];
@@ -11,20 +12,21 @@ interface CartContextProps {
 }
 
 const CartContext = createContext<CartContextProps | undefined>(undefined);
-const url = 'https://google.com'
 
 export function CartProvider({ children }: { children: React.ReactNode }) {
   const [cartItems, setCartItems] = useState<CartItem[]>([]);
 
+  // Cargar el carrito desde localStorage al iniciar
   useEffect(() => {
     const storedCart = localStorage.getItem("cart");
     if (storedCart) {
       try {
         const parsedCart = JSON.parse(storedCart);
         if (Array.isArray(parsedCart)) {
+          // Asegúrate de que todos los productos tengan `link`
           const validatedCart = parsedCart.map((item) => ({
             ...item,
-            link: item.link || url,
+            link: item.link || `${url}${item.id}`,
           }));
           setCartItems(validatedCart);
         }
@@ -35,10 +37,12 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     }
   }, []);
 
+  // Guardar el carrito en localStorage cuando cambia
   useEffect(() => {
     localStorage.setItem("cart", JSON.stringify(cartItems));
   }, [cartItems]);
 
+  // Función para agregar un producto al carrito
   const addToCart = (product: Product) => {
     setCartItems((prev) => {
       const existingItem = prev.find((item) => item.id === product.id);
@@ -47,10 +51,13 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
           item.id === product.id ? { ...item, quantity: item.quantity + 1 } : item
         );
       }
-      return [...prev, { ...product, quantity: 1, link: product.link || url }];
+      // Genera el enlace dinámicamente si no está definido
+      const productLink = product.link || `${url}${product.id}`;
+      return [...prev, { ...product, quantity: 1, link: productLink }];
     });
   };
 
+  // Función para eliminar un producto del carrito
   const removeFromCart = (product: Product, removeAll = false) => {
     setCartItems((prev) => {
       const existingItem = prev.find((item) => item.id === product.id);
@@ -66,6 +73,7 @@ export function CartProvider({ children }: { children: React.ReactNode }) {
     });
   };
 
+  // Función para vaciar el carrito
   const clearCart = () => setCartItems([]);
 
   return (

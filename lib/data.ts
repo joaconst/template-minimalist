@@ -1,6 +1,7 @@
 // data.ts
 import { supabase } from "@/lib/supabase/client";
 import { Product, Category } from "@/lib/types";
+import { url } from "./utils/url";
 
 /**
  * Obtiene todos los productos con filtros opcionales
@@ -173,14 +174,19 @@ export async function getProductById(id: string): Promise<Product | null> {
       .eq("id", id)
       .single();
 
-    if (error) throw error;
-    return data as Product;
+    if (error || !data) throw error;
+    
+    // Asegurar que el producto tenga link
+    return { 
+      ...data, 
+      link: data.link || `${url}${data.id}`
+    } as Product;
+    
   } catch (error) {
-    console.error("Error fetching product:", error instanceof Error ? error.message : error);
+    console.error("Error fetching product:", error);
     return null;
   }
 }
-
 // Función faltante para productos por categoría
 export async function getProductsByCategory(category: string): Promise<Product[]> {
   try {
