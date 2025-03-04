@@ -18,7 +18,7 @@ export interface Product {
 
 export interface CartItem extends Product {
   quantity: number;
-  link:string;
+  link?:string;
 }
 
 export interface Category {
