@@ -13,37 +13,42 @@ export default function CartModal() {
       alert("Tu carrito está vacío. Agrega productos antes de continuar.");
       return;
     }
-
+  
     try {
       const isValidCart = cartItems.every(
-        (item) => item.titulo && item.precio && item.quantity
+        (item) => item.titulo && item.precio && item.quantity && item.link
       );
-      if (!isValidCart) throw new Error("Datos incompletos en el carrito");
-
+      if (!isValidCart) {
+        const invalidItems = cartItems.filter(
+          (item) => !item.titulo || !item.precio || !item.quantity || !item.link
+        );
+        console.error("Productos inválidos en el carrito:", invalidItems);
+        throw new Error("Datos incompletos en el carrito. Revisa la consola para más detalles.");
+      }
+  
       const message = cartItems
         .map(
           (item) =>
             `✔ ${item.titulo} (x${item.quantity}) - ${formatPrice(
               item.precio * item.quantity
-            )}`
+            )}%0A${encodeURIComponent(item.link)}` // Incluye el enlace
         )
         .join("%0A");
-
+  
       const total = cartItems.reduce(
         (acc, item) => acc + item.precio * item.quantity,
         0
       );
-
+  
       const whatsappMessage = `¡Hola! Quisiera hacer el siguiente pedido:%0A%0A${message}%0A%0ATotal: ${formatPrice(
         total
       )}%0A%0A¿Está disponible?`;
-
-      const whatsappURL = `https://api.whatsapp.com/send?phone=+5493516222999&text=${whatsappMessage}`;
-
+  
+      const whatsappURL = `https://api.whatsapp.com/send?phone=+543512362632&text=${whatsappMessage}`;
+  
       window.open(whatsappURL, "_blank");
     } catch (error) {
       console.error("Error:", error);
-      alert("Error al generar el mensaje. Por favor, inténtalo de nuevo.");
     }
   };
 

@@ -13,10 +13,12 @@ export interface Product {
   imagen2: string;
   imagen3: string;
   destacado: boolean;
+  link?:string;
 }
 
 export interface CartItem extends Product {
   quantity: number;
+  link:string;
 }
 
 export interface Category {

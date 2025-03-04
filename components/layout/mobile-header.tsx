@@ -25,7 +25,7 @@ export function MobileMenu() {
             <Link
               key={route.href}
               href={route.href}
-              className="text-sm font-medium text-muted-foreground transition-colors hover:text-primary"
+              className="text-lg font-medium text-muted-foreground transition-colors hover:text-primary"
             >
               {route.label}
             </Link>
