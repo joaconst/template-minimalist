@@ -31,7 +31,7 @@ export default function CartModal() {
           (item) =>
             `✔ ${item.titulo} (x${item.quantity}) - ${formatPrice(
               item.precio * item.quantity
-            )}%0A${encodeURIComponent(item.link)}` // Incluye el enlace
+            )}%0A${encodeURIComponent(item.link ?? "")}` // Incluye el enlace
         )
         .join("%0A");
   
