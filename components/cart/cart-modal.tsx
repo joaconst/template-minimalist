@@ -44,7 +44,7 @@ export default function CartModal() {
         total
       )}%0A%0A¿Está disponible?`;
   
-      const whatsappURL = `https://api.whatsapp.com/send?phone=+5493516222999&text=${whatsappMessage}`;
+      const whatsappURL = `https://api.whatsapp.com/send?phone=+&text=${whatsappMessage}`;
   
       window.open(whatsappURL, "_blank");
     } catch (error) {

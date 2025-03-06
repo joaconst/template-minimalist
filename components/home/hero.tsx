@@ -15,7 +15,7 @@ export function Hero({
   title = "Lentes Spectra",
   description = "Somos una empresa familiar dedicada a la importación de lentes de sol y armazones de receta, de excelente calidad y al mejor precio de mercado.",
   ctaText = "Ver todos los productos",
-  ctaCont = "5493516222999",
+  ctaCont = "",
   ctaLink = "/products",
   backgroundImage,
 }: HeroProps) {

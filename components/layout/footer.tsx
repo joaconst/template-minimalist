@@ -13,7 +13,7 @@ interface FooterProps {
 export function Footer({
   storeName = "Spectra",
   email = "spectraglasses42@gmail.com",
-  phone = "+5493516222999",
+  phone = "+",
   wsp = "WhatsApp"
 }: FooterProps) {
   const currentYear = new Date().getFullYear();
