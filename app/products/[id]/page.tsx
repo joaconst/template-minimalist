@@ -88,7 +88,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   };
   const handleContactNow = () => {
     const message = `Hola, me interesa el producto: ${product?.titulo} (${window.location.href}). ¿Podrías darme más información?`;
-    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "5493516222999";
+    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
     const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
