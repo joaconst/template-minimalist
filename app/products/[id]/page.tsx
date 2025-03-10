@@ -78,7 +78,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
     if (product) {
       // Genera el link si no existe
       const productLink = product.link || `${url}${product.id}`;
-      
+
       const cartItem: CartItem = {
         ...product,
         quantity: 1,
@@ -152,7 +152,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
             <ArrowLeft className="mr-2 h-4 w-4" />
             Volver a todos los productos
           </Link>
-          
+
           {loading ? (
             <div className="grid gap-6 md:grid-cols-2 lg:gap-8">
               <div className="space-y-4">
@@ -185,14 +185,14 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   <div className="relative aspect-square bg-muted rounded-xl overflow-hidden shadow-lg">
                     {images.length > 1 && (
                       <>
-                        <button 
+                        <button
                           onClick={() => handleImageNavigation((currentImageIndex - 1 + images.length) % images.length)}
                           className="absolute left-4 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/80 rounded-full shadow-sm hover:bg-background transition-colors"
                           aria-label="Imagen anterior"
                         >
                           <ChevronLeft className="h-6 w-6" />
                         </button>
-                        <button 
+                        <button
                           onClick={() => handleImageNavigation((currentImageIndex + 1) % images.length)}
                           className="absolute right-4 top-1/2 -translate-y-1/2 z-10 p-2 bg-background/80 rounded-full shadow-sm hover:bg-background transition-colors"
                           aria-label="Siguiente imagen"
@@ -206,29 +206,34 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                       alt={`${product.titulo} - Imagen ${currentImageIndex + 1}`}
                       fill
                       className="object-cover"
+                      style={{
+                        objectPosition:
+                          currentImageIndex === 0 ? "center" :
+                            currentImageIndex === 1 ? "left -50px top 0" :
+                              ""
+                      }}
                       sizes="(max-width: 768px) 100vw, 50vw"
                       priority
                     />
                   </div>
-                  
+
                   {images.length > 1 && (
                     <div className="flex gap-2 overflow-x-auto pb-2">
                       {images.map((img, index) => (
                         <button
                           key={index}
                           onClick={() => handleImageNavigation(index)}
-                          className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${
-                            index === currentImageIndex 
-                              ? "border-primary" 
-                              : "border-transparent"
-                          }`}
+                          className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all ${index === currentImageIndex
+                            ? "border-primary"
+                            : "border-transparent"
+                            }`}
                         >
                           <Image
                             src={img}
                             alt={`Miniatura ${index + 1}`}
                             width={80}
                             height={80}
-                            className="object-cover w-full h-full"
+                            className="object-cover w-full h-full "
                           />
                         </button>
                       ))}
@@ -241,17 +246,17 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   <h1 className="text-3xl font-bold lg:text-4xl">
                     {product.titulo}
                   </h1>
-                  
+
                   <p className="text-2xl font-medium text-primary">
                     {formatPrice(product.precio)}
                   </p>
-                  
+
                   <Separator className="my-4" />
-                  
+
                   <p className="text-muted-foreground leading-relaxed">
                     {product.descripcion}
                   </p>
-                  
+
                   <div className="grid grid-cols-2 gap-3 text-sm">
                     <div className="bg-accent p-3 rounded-lg">
                       <p className="text-lg font-medium text-black">Color del vidrio</p>
@@ -276,8 +281,8 @@ export default function ProductPage({ params }: { params: { id: string } }) {
                   </div>
 
                   <div className="flex flex-col gap-3 sm:flex-row">
-                    <Button 
-                      size="lg" 
+                    <Button
+                      size="lg"
                       className="flex-1 gap-2 py-6 text-base border-2 border-primary/50"
                       onClick={handleAddToCart}
                     >

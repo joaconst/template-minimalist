@@ -21,15 +21,27 @@ export function FeaturedProducts({
   const { addToCart } = useCart();
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
 
-  // Extraer categorías únicas con slugs consistentes
+  // Función para traducir nombres de categoría
+  const translateCategory = (rawCategory: string) => {
+    const lowerCategory = rawCategory.toLowerCase();
+    switch(lowerCategory) {
+      case 'femenino': return 'Gafas de sol para mujer';
+      case 'masculino': return 'Gafas de sol para hombre';
+      case 'unisex': return 'Gafas unisex';
+      default: return rawCategory;
+    }
+  };
+
+  // Extraer categorías únicas con nombres traducidos
   const categories = useMemo(() => {
     const categoryMap = new Map<string, string>();
     products.forEach(product => {
       const rawCategory = product.categoria?.trim();
       if (rawCategory) {
         const slug = rawCategory.toLowerCase().replace(/\s+/g, '-');
+        const displayName = translateCategory(rawCategory);
         if (!categoryMap.has(slug)) {
-          categoryMap.set(slug, rawCategory);
+          categoryMap.set(slug, displayName);
         }
       }
     });
@@ -38,7 +50,6 @@ export function FeaturedProducts({
       name,
     }));
   }, [products]);
-
   const handleAddToCart = (product: Product) => {
     const cartItem: CartItem = {
       ...product,
@@ -62,7 +73,6 @@ export function FeaturedProducts({
           <h2 className="text-3xl font-bold">{title}</h2>
           <p className="mt-4 text-muted-foreground">{description}</p>
           
-          {/* Selector de categorías mejorado */}
           <div className="mt-6 flex flex-wrap justify-center gap-2">
             <Button
               variant={selectedCategory === 'all' ? 'default' : 'outline'}
