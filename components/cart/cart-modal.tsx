@@ -4,6 +4,7 @@ import { useCart } from "@/components/cart/cart-context";
 import { formatPrice } from "@/lib/utils/format";
 import { Button } from "@/components/ui/button";
 import { Trash2 } from "lucide-react";
+import { wsp } from "@/lib/utils/wsp";
 
 export default function CartModal() {
   const { cartItems, addToCart, removeFromCart, clearCart } = useCart();
@@ -31,7 +32,7 @@ export default function CartModal() {
           (item) =>
             `✔ ${item.titulo} (x${item.quantity}) - ${formatPrice(
               item.precio * item.quantity
-            )}%0A${encodeURIComponent(item.link ?? "")}` // Incluye el enlace
+            )}%0A${encodeURIComponent(item.link ?? "")}` 
         )
         .join("%0A");
   
@@ -44,7 +45,7 @@ export default function CartModal() {
         total
       )}%0A%0A¿Está disponible?`;
   
-      const whatsappURL = `https://api.whatsapp.com/send?phone=+&text=${whatsappMessage}`;
+      const whatsappURL = `https://api.whatsapp.com/send?phone=${wsp}&text=${whatsappMessage}`;
   
       window.open(whatsappURL, "_blank");
     } catch (error) {

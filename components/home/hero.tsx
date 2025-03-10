@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Container } from "@/components/ui/container";
+import { wsp } from "@/lib/utils/wsp";
 
 interface HeroProps {
   title?: string;
@@ -15,7 +16,7 @@ export function Hero({
   title = "Lentes Spectra",
   description = "Somos una empresa familiar dedicada a la importación de lentes de sol y armazones de receta, de excelente calidad y al mejor precio de mercado.",
   ctaText = "Ver todos los productos",
-  ctaCont = "",
+  ctaCont = wsp,
   ctaLink = "/products",
   backgroundImage,
 }: HeroProps) {

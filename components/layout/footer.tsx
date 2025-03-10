@@ -1,20 +1,21 @@
 import Link from "next/link";
 import { Instagram, Facebook, Mail, Phone, MessageCircle } from "lucide-react";
 import { Container } from "@/components/ui/container";
+import { wsp } from "@/lib/utils/wsp";
 
 interface FooterProps {
   storeName?: string;
   location?: string;
   email?: string;
   phone?: string;
-  wsp?: string;
+  wtsp?: string;
 }
 
 export function Footer({
   storeName = "Spectra",
   email = "spectraglasses42@gmail.com",
-  phone = "+",
-  wsp = "WhatsApp"
+  phone = wsp,
+  wtsp = "WhatsApp"
 }: FooterProps) {
   const currentYear = new Date().getFullYear();
 
@@ -65,8 +66,8 @@ export function Footer({
               </li>
               <li className="flex items-center gap-2">
                 <MessageCircle className="h-4 w-4 text-muted-foreground" />
-                <a href="https://wa.me/5493516222999" className="text-muted-foreground hover:text-foreground transition-colors">
-                  {wsp}
+                <a href={`https://wa.me/${wsp}`} className="text-muted-foreground hover:text-foreground transition-colors">
+                  {wtsp}
                 </a>
               </li>   
             </ul>

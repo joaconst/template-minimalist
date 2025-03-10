@@ -18,6 +18,7 @@ import { useCart } from "@/components/cart/cart-context";
 import { CartItem } from "@/lib/types";
 import { Skeleton } from "@/components/ui/skeleton";
 import { url } from "@/lib/utils/url";
+import { wsp } from "@/lib/utils/wsp";
 
 export default function ProductPage({ params }: { params: { id: string } }) {
   const router = useRouter();
@@ -88,8 +89,7 @@ export default function ProductPage({ params }: { params: { id: string } }) {
   };
   const handleContactNow = () => {
     const message = `Hola, me interesa el producto: ${product?.titulo} (${window.location.href}). ¿Podrías darme más información?`;
-    const phoneNumber = process.env.NEXT_PUBLIC_WHATSAPP_NUMBER || "";
-    const whatsappURL = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
+    const whatsappURL = `https://wa.me/${wsp}?text=${encodeURIComponent(message)}`;
     window.open(whatsappURL, "_blank");
   };
 
